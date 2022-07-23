@@ -167,7 +167,7 @@ const AccountInit: NextPage = () => {
         isLoading={loading}
         onClick={() => uploadPlaylists().then(() => router.back())}
       >
-        Upload
+        Upload 
       </Button>
     </Box>
   );
