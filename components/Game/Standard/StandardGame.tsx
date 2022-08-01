@@ -20,7 +20,6 @@ import { Song } from "../../../models/spotify/songs";
 import { getSongLyrics } from "../../../utils/genius/getLyrics";
 import SongOptions from "./SongOptions";
 import Timer from "./Timer";
-import SongCard from "../SongCard";
 
 interface StandardGameProps {
   songList: Song[];
@@ -222,11 +221,11 @@ const StandardGame: React.FC<StandardGameProps> = ({
                     <Text key={i} fontStyle={"bold"} fontSize={"xl"}>
                       {line}
                     </Text>
-                  ))}{" "}
+                  ))}
                 </VStack>
               ) : (
                 <Spinner color="orange" size="xl">
-                  {" "}
+                  
                 </Spinner>
               )}
 
