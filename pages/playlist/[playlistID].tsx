@@ -15,9 +15,14 @@ import { NextPage } from "next";
 import Head from "next/head";
 import router, { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import PlaylistOverview from "../../components/Game/PlaylistOverview";
 import SongGrid from "../../components/Game/SongGrid";
+import SongOptions from "../../components/Game/Standard/SongOptions";
+import StandardGame from "../../components/Game/Standard/StandardGame";
 import { getFSPlaylistDataFromID } from "../../firebase/playlists/getPlaylists";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
+import { Song } from "../../models/spotify/songs";
+import { shuffle } from "../../utils/game/standard/methods";
 
 const PlaylistPage: NextPage = () => {
   const router = useRouter();
@@ -25,8 +30,11 @@ const PlaylistPage: NextPage = () => {
   const [loading, setLoading] = useState(true);
   const [playlistData, setPlaylistData] =
     useState<PlaylistCollectionDoc | null>(null);
-  const [gameState, setGameState] = useState<"Idle" | "Loading" | "Ready">(
-    "Idle"
+
+  const [songList, setSongList] = useState<Song[] | null>(null);
+
+  const [gameMode, setGameMode] = useState<"Base" | "Standard" | "Casual">(
+    "Base"
   );
 
   const loadPlaylist = useCallback(async () => {
@@ -41,6 +49,7 @@ const PlaylistPage: NextPage = () => {
         if (data) {
           setPlaylistData(data);
           console.log(playlistData);
+          setSongList(shuffle(data.savedTracks));
         }
 
         setLoading(false);
@@ -54,11 +63,22 @@ const PlaylistPage: NextPage = () => {
     loadPlaylist();
   }, [loadPlaylist]);
 
-  const loadLyricQueue = useCallback(() => {
-    let lyricQueue: string[] = [];
-  }, []);
-
-  useEffect(() => {}, []);
+  const handleGameModes = () => {
+    switch (gameMode) {
+      case "Base":
+        return playlistData ? (
+          <PlaylistOverview playlistData={playlistData} setGameMode={setGameMode} />
+        ) : (
+          <> </>
+        );
+      case "Standard":
+        return playlistData? <StandardGame songList={playlistData.savedTracks} /> : <></>;
+      case "Casual":
+        return <> </>;
+      default:
+        const exhaustive: never = gameMode;
+    }
+  };
 
   return (
     <Box bg={"black"} color="gray.300" minH="100vh">
@@ -74,28 +94,8 @@ const PlaylistPage: NextPage = () => {
 
       {loading && <Spinner />}
 
-      {playlistData && !loading && (
-        <VStack w="100%" justifyContent={"center"}>
-          <Heading> {playlistData.name} </Heading>
-
-          {gameState == "Idle" && (
-            <VStack align="start" spacing={6}>
-              {/* Paginate This */}
-              <SongGrid savedTracks={playlistData.savedTracks} />
-              <Button
-                colorScheme={"green"}
-                onClick={() => setGameState("Ready")}
-              >
-                Start Game
-              </Button>
-            </VStack>
-          )}
-
-          {gameState == "Loading" && <Spinner />}
-
-          {gameState == "Ready" && <Text> lyrics </Text>}
-        </VStack>
-      )}
+          
+      {handleGameModes()}
     </Box>
   );
 };

@@ -129,7 +129,7 @@ const AccountInit: NextPage = () => {
   };
 
   return (
-    <Box bg={"black"} color="gray.300" minH="100vh" pb={20}> 
+    <Box bg={"black"} color="gray.300" minH="100vh" pb={20}>
       <Head>
         <title>Upload Your Playlists</title>
         <meta name="Account Page" content="Account Page" />
@@ -145,7 +145,7 @@ const AccountInit: NextPage = () => {
           // emptyColor="gray.200"
         />
       )}
-      {playlistsData && savedTracksData && (
+      {playlistsData && savedTracksData && uploadState == "Idle" && (
         <PlaylistSelect
           playlists={[...playlistsData, savedTracksData]}
           setPublicPlaylists={setPublicPlaylists}
@@ -155,20 +155,30 @@ const AccountInit: NextPage = () => {
         />
       )}
 
-      <Button
-        pos="fixed"
-        zIndex={100}
-        left={6}
-        bottom={6}
-        size="lg"
-        shadow={"2xl"}
-        colorScheme={"purple"}
-        mt={16}
-        isLoading={loading}
-        onClick={() => uploadPlaylists().then(() => router.back())}
-      >
-        Upload 
-      </Button>
+      {uploadState == "Idle" && (
+        <Button
+          pos="fixed"
+          zIndex={100}
+          left={6}
+          bottom={6}
+          size="lg"
+          shadow={"2xl"}
+          colorScheme={"purple"}
+          mt={16}
+          isLoading={loading}
+          onClick={() =>
+            uploadPlaylists().then(() => {
+              router.back();
+            })
+          }
+        >
+          Upload
+        </Button>
+      )}
+
+      {uploadState == "Uploading" && (
+        <Spinner size="xl" color="green.300" thickness="4px" speed="0.55s" />
+      )}
     </Box>
   );
 };

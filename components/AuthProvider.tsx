@@ -24,7 +24,7 @@ export const useUser = () => {
   return useContext(authContext);
 };
 
-const MILLISECONDS_IN_AN_HOUR = 3600 * 100; // seconds in an hour * ms in a second
+const MILLISECONDS_IN_AN_HOUR = 3600 * 1000; // seconds in an hour * ms in a second
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);

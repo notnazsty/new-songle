@@ -46,7 +46,6 @@ import { Song } from "../../models/spotify/songs";
           <Text fontSize={{ base: "sm", lg: "md" }}>
             {song.artists.join(", ")}
           </Text>
-          {/* <Text>{new Date(song.releaseDate).getFullYear()}</Text> */}
         </VStack>
       </HStack>
     );

@@ -1,29 +1,44 @@
-import { Grid, HStack, VStack } from '@chakra-ui/react'
-import React, { Dispatch, SetStateAction, useState } from 'react'
-import { Song } from '../../models/spotify/songs';
-import Searchbar from './Searchbar';
-import SongPreview from './SongPreview';
+import { Grid, HStack, VStack } from "@chakra-ui/react";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import { Song } from "../../models/spotify/songs";
+import Searchbar from "./Searchbar";
+import SongPreview from "./SongPreview";
+import { PaginatedList } from "react-paginated-list";
 
 interface SongGridProps {
-    savedTracks: Song[]
+  savedTracks: Song[];
 }
 
-const SongGrid: React.FC<SongGridProps> = ({
-    savedTracks
-}) => {
+const SongGrid: React.FC<SongGridProps> = ({ savedTracks }) => {
+  //UPDATE IT TO WORK WITH DIFF SCREEN SIZES
 
-    const [songList, setSongList] = useState<Song[]>([])
+  const [songList, setSongList] = useState<Song[]>([]);
 
-    return (
-        <VStack w='100%' justifyContent={'left'}>
+  return (
+    <VStack w="100%" justifyContent={"left"}>
+      <Searchbar songs={savedTracks} setSongList={setSongList} />
 
-            <Searchbar songs={savedTracks} setSongList={setSongList} />
-
-            <Grid w="100%" templateColumns={{ md: "repeat(1, 1fr)", xl: "repeat(6, 1fr)" }} gridGap={4}>
-                {songList.map((song, i) => <SongPreview key={i} song={song} />)}
+      <PaginatedList
+        list={songList}
+        itemsPerPage={12}
+        renderList={(list) => (
+          <>
+            <Grid
+              w="100%"
+              templateColumns={{ md: "repeat(1, 1fr)", xl: "repeat(6, 1fr)" }}
+              gridGap={4}
+            >
+              {list.map((song, i) => (
+                <SongPreview key={i} song={song} />
+              ))}
             </Grid>
-        </VStack>
-    )
-}
+          </>
+        )}
+      />
 
-export default SongGrid
+    
+    </VStack>
+  );
+};
+
+export default SongGrid;

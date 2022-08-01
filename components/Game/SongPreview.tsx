@@ -1,23 +1,21 @@
-import { HStack, Box, VStack, Text } from '@chakra-ui/react';
-import React from 'react'
-import { Song } from '../../models/spotify/songs';
-
+import { HStack, Box, VStack, Text, Tooltip } from "@chakra-ui/react";
+import React from "react";
+import { Song } from "../../models/spotify/songs";
 
 interface Props {
-    song: Song;
-  }
+  song: Song;
+}
 
-  
 const SongPreview: React.FC<Props> = ({ song }) => {
-  
-    return (
+  return (
+    <Tooltip label={song.name + " by " + song.artists[0]}>
       <VStack
         rounded="md"
         overflow={"hidden"}
         cursor="pointer"
         _hover={{ borderColor: "blue.500" }}
-        w='100%'
-        maxW='240px'
+        w="100%"
+        maxW="240px"
       >
         <Box
           w="100%"
@@ -34,9 +32,10 @@ const SongPreview: React.FC<Props> = ({ song }) => {
               : ""
           }
         ></Box>
-        <Text textAlign={'center'}> {song.name} </Text>
+        <Text textAlign={"center"}> {song.name} </Text>
       </VStack>
-    );
-  };
+    </Tooltip>
+  );
+};
 
-export default SongPreview
+export default SongPreview;
