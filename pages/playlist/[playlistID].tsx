@@ -67,12 +67,23 @@ const PlaylistPage: NextPage = () => {
     switch (gameMode) {
       case "Base":
         return playlistData ? (
-          <PlaylistOverview playlistData={playlistData} setGameMode={setGameMode} />
+          <PlaylistOverview
+            playlistData={playlistData}
+            setGameMode={setGameMode}
+          />
         ) : (
           <> </>
         );
       case "Standard":
-        return playlistData? <StandardGame songList={playlistData.savedTracks} /> : <></>;
+        return playlistData ? (
+          <StandardGame
+            songList={playlistData.savedTracks}
+            setSongList={setSongList}
+            setGameMode={setGameMode}
+          />
+        ) : (
+          <></>
+        );
       case "Casual":
         return <> </>;
       default:
@@ -94,7 +105,6 @@ const PlaylistPage: NextPage = () => {
 
       {loading && <Spinner />}
 
-          
       {handleGameModes()}
     </Box>
   );

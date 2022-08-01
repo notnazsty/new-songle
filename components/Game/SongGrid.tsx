@@ -14,6 +14,9 @@ const SongGrid: React.FC<SongGridProps> = ({ savedTracks }) => {
 
   const [songList, setSongList] = useState<Song[]>([]);
 
+  // Use Styled Components To Style This
+
+
   return (
     <VStack w="100%" justifyContent={"left"}>
       <Searchbar songs={savedTracks} setSongList={setSongList} />
@@ -33,7 +36,9 @@ const SongGrid: React.FC<SongGridProps> = ({ savedTracks }) => {
               ))}
             </Grid>
           </>
-        )}
+        )
+        
+      }
       />
 
     
