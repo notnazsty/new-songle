@@ -10,6 +10,7 @@ import {
   Grid,
   Stack,
 } from "@chakra-ui/react";
+import CasualGame from "components/Game/Casual/CasualGame";
 import { getDoc, doc } from "firebase/firestore";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -22,7 +23,7 @@ import StandardGame from "../../components/Game/Standard/StandardGame";
 import { getFSPlaylistDataFromID } from "../../firebase/playlists/getPlaylists";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
 import { Song } from "../../models/spotify/songs";
-import { shuffle } from "../../utils/game/standard/methods";
+import { shuffle } from "../../utils/game/methods";
 
 const PlaylistPage: NextPage = () => {
   const router = useRouter();
@@ -78,14 +79,13 @@ const PlaylistPage: NextPage = () => {
         return playlistData ? (
           <StandardGame
             songList={playlistData.savedTracks}
-            setSongList={setSongList}
             setGameMode={setGameMode}
           />
         ) : (
           <></>
         );
       case "Casual":
-        return <> </>;
+        return playlistData? <CasualGame  songList={playlistData.savedTracks} setGameMode={setGameMode}/> : <></>;
       default:
         const exhaustive: never = gameMode;
     }

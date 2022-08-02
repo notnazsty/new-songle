@@ -19,7 +19,7 @@ const SongGrid: React.FC<SongGridProps> = ({ savedTracks }) => {
 
   return (
     <VStack w="100%" justifyContent={"left"}>
-      <Searchbar songs={savedTracks} setSongList={setSongList} />
+      <Searchbar songs={savedTracks} setSongList={setSongList}  />
 
       <PaginatedList
         list={songList}

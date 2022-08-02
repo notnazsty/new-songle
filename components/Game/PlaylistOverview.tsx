@@ -1,4 +1,12 @@
-import { VStack, Heading, HStack, Button, Image, Grid } from "@chakra-ui/react";
+import {
+  VStack,
+  Heading,
+  HStack,
+  Button,
+  Image,
+  Grid,
+  Center,
+} from "@chakra-ui/react";
 import React, { Dispatch, SetStateAction } from "react";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
 import SongGrid from "./SongGrid";
@@ -12,34 +20,46 @@ const PlaylistOverview: React.FC<PlaylistOverviewProps> = ({
   setGameMode,
 }) => {
   return (
-    <Grid w="100%" templateColumns={{lg: "500px auto"}}>
-      <VStack align={"stretch"} p={4}>
-        <Heading textAlign={{base: "center", md: "start"}}> {playlistData.name} </Heading>
+    <Grid w="100%" templateColumns={{ lg: "500px auto" }}>
+      <Center>
+        <VStack align={"stretch"} p={4} h='100%' maxH='100vh'>
+          <Heading textAlign={{ base: "center", md: "start" }}>
+            {" "}
+            {playlistData.name}{" "}
+          </Heading>
 
-        {playlistData.images ? (
-          <Image
-            src={playlistData.images[0].url}
-            alt={playlistData.name}
-            boxSize="sm"
-          />
-        ) : (
-          <> </>
-        )}
-      </VStack>
+          {playlistData.images ? (
+            <Image
+              src={playlistData.images[0].url}
+              alt={playlistData.name}
+              boxSize="sm"
+            />
+          ) : (
+            <> </>
+          )}
+        </VStack>
+      </Center>
 
       <VStack align="start" spacing={6} p={4}>
-        {/* Paginate This */}
         <SongGrid savedTracks={playlistData.savedTracks} />
       </VStack>
 
       <HStack pos="fixed" bottom={6} left={6}>
-          <Button size={"lg"} colorScheme={"green"} onClick={() => setGameMode("Standard")}>
-            Standard Game
-          </Button>
-          <Button size={"lg"} colorScheme={"purple"} onClick={() => setGameMode("Casual")}>
-            Casual Game
-          </Button>
-        </HStack>
+        <Button
+          size={"lg"}
+          colorScheme={"green"}
+          onClick={() => setGameMode("Standard")}
+        >
+          Standard Game
+        </Button>
+        <Button
+          size={"lg"}
+          colorScheme={"purple"}
+          onClick={() => setGameMode("Casual")}
+        >
+          Casual Game
+        </Button>
+      </HStack>
     </Grid>
   );
 };

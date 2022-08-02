@@ -9,7 +9,6 @@ import {
   Image,
   Stack,
 } from "@chakra-ui/react";
-import { getRandomLyrics, shuffle } from "../../../utils/game/standard/methods";
 import React, {
   Dispatch,
   SetStateAction,
@@ -17,6 +16,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { shuffle, getRandomLyrics } from "utils/game/methods";
 import { Song } from "../../../models/spotify/songs";
 import { getSongLyrics } from "../../../utils/genius/getLyrics";
 import SongOptions from "./SongOptions";
@@ -24,16 +24,14 @@ import Timer from "./Timer";
 
 interface StandardGameProps {
   songList: Song[];
-  setSongList: Dispatch<SetStateAction<Song[] | null>>;
   setGameMode: Dispatch<SetStateAction<"Base" | "Standard" | "Casual">>;
 }
 
 const StandardGame: React.FC<StandardGameProps> = ({
   songList,
-  setSongList,
   setGameMode,
 }) => {
-  const [lyrics, setLyrics] = useState<string[] | null>();
+  const [lyrics, setLyrics] = useState<string[] | null>(null);
   const [correctSong, setCorrectSong] = useState<Song | null>(null);
   const [options, setOptions] = useState<Song[] | null>(null);
   const [songListStack, setSongListStack] = useState<Song[]>(shuffle(songList));
