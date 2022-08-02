@@ -7,6 +7,7 @@ import {
   Text,
   VStack,
   Image,
+  Stack,
 } from "@chakra-ui/react";
 import { getRandomLyrics, shuffle } from "../../../utils/game/standard/methods";
 import React, {
@@ -194,41 +195,48 @@ const StandardGame: React.FC<StandardGameProps> = ({
     loadNextRound();
   };
 
+  if (!isLyricLoaded) {
+    return <Spinner color="orange" size="xl" />;
+  }
+
   return (
     <Box>
       {correctSong && options && lyrics ? (
         <>
           {gameState == "In Progress" ? (
             <>
-              <HStack justifyContent={"space-around"} mx={4}>
-                <Timer timeLeft={timeLeft} />
-
-                <Text color="green" fontSize="4xl">
-                  {score}
+              <HStack
+                w="100%"
+                spacing={0}
+                justifyContent="space-between"
+                px={4}
+              >
+                <Text fontSize="3xl">
+                  <Text color="green.100">
+                    {score} pts
+                  </Text>
                 </Text>
-
-                <HStack w="100%" justifyContent={"right"}>
+                <HStack>
                   {new Array(3 - wrongAnswers).fill("_").map((val, i) => (
                     <Text fontSize="3xl" color="red" key={i}>
-                      x
+                      ❤️
                     </Text>
                   ))}
                 </HStack>
               </HStack>
-              {isLyricLoaded ? (
-                <VStack spacing={2} mt={4} mb={8} color="white">
+              <Stack direction={["column", "row"]} py={{base: 6, md: 16}} align="center">
+                <HStack mx={4} w="100px" py={4}>
+                  <Timer timeLeft={timeLeft} />
+                </HStack>
+                <VStack w="100%" spacing={2} mt={4} mb={8} color="white">
                   {lyrics.map((line, i) => (
-                    <Text key={i} fontStyle={"bold"} fontSize={"xl"}>
+                    <Text textAlign={"center"} key={i} fontStyle={"bold"} fontSize={"xl"}>
                       {line}
                     </Text>
                   ))}
                 </VStack>
-              ) : (
-                <Spinner color="orange" size="xl">
-                  
-                </Spinner>
-              )}
-
+                <HStack mx={4} w="100px" />
+              </Stack>
               <SongOptions options={options} handleGuess={handleGuess} />
             </>
           ) : gameState == "Win" ? (
@@ -244,13 +252,19 @@ const StandardGame: React.FC<StandardGameProps> = ({
               </HStack>
             </>
           ) : (
-            <VStack w='100%' justifyContent={'center'} spacing={8}>
-              <Heading color='red' mt={4}> Loss </Heading>
+            <VStack w="100%" justifyContent={"center"} spacing={8}>
+              <Heading color="red" mt={4}>
+                {" "}
+                Loss{" "}
+              </Heading>
 
-              <Text fontSize={'2xl'}> Score: {score} </Text>
+              <Text fontSize={"2xl"}> Score: {score} </Text>
 
               <VStack>
-                <Text fontSize={'2xl'} fontWeight='bold'> Correct Song </Text>
+                <Text fontSize={"2xl"} fontWeight="bold">
+                  {" "}
+                  Correct Song{" "}
+                </Text>
                 <Image
                   src={correctSong.coverImages[0].url}
                   alt={correctSong.name}
@@ -258,7 +272,7 @@ const StandardGame: React.FC<StandardGameProps> = ({
                 />
                 <Text> {correctSong.name} </Text>
               </VStack>
-              <HStack w="100%" justifyContent={'center'} >
+              <HStack w="100%" justifyContent={"center"}>
                 <Button colorScheme="green" onClick={() => startNewGame()}>
                   Play Again
                 </Button>

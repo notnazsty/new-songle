@@ -28,7 +28,7 @@ const SongGrid: React.FC<SongGridProps> = ({ savedTracks }) => {
           <>
             <Grid
               w="100%"
-              templateColumns={{ md: "repeat(1, 1fr)", xl: "repeat(6, 1fr)" }}
+              templateColumns={{ base: "repeat(2, 1fr)", sm: "repeat(3, 1fr)", md: "repeat(4, 1fr)", lg: "repeat(3, 1fr)", xl: "repeat(5, 1fr)" }}
               gridGap={4}
             >
               {list.map((song, i) => (

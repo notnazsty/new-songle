@@ -9,19 +9,21 @@ import { Song } from "../../models/spotify/songs";
 
   interface Props {
     song: Song;
+    bg: string;
   }
   
-  const SongCard: React.FC<Props> = ({ song }) => {
+  const SongCard: React.FC<Props> = ({ song, bg }) => {
   
     return (
       <HStack
         w="100%"
-        border="1px"
-        borderColor={"gray.500"}
+        // border="1px"
+        // borderColor={"gray.500"}
         rounded="md"
         overflow={"hidden"}
         cursor="pointer"
         _hover={{ borderColor: "blue.500" }}
+        bg={bg}
       >
         <Box
           w="100%"

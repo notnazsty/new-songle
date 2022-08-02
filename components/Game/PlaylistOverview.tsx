@@ -1,4 +1,4 @@
-import { VStack, Heading, HStack, Button, Image } from "@chakra-ui/react";
+import { VStack, Heading, HStack, Button, Image, Grid } from "@chakra-ui/react";
 import React, { Dispatch, SetStateAction } from "react";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
 import SongGrid from "./SongGrid";
@@ -12,30 +12,35 @@ const PlaylistOverview: React.FC<PlaylistOverviewProps> = ({
   setGameMode,
 }) => {
   return (
-    <VStack w="100%" justifyContent={"center"}>
-     
+    <Grid w="100%" templateColumns={{lg: "500px auto"}}>
+      <VStack align={"stretch"} p={4}>
+        <Heading textAlign={{base: "center", md: "start"}}> {playlistData.name} </Heading>
 
-      <Heading> {playlistData.name} </Heading>
+        {playlistData.images ? (
+          <Image
+            src={playlistData.images[0].url}
+            alt={playlistData.name}
+            boxSize="sm"
+          />
+        ) : (
+          <> </>
+        )}
+      </VStack>
 
-      {playlistData.images ? (
-        <Image src={playlistData.images[0].url} alt={playlistData.name} boxSize='sm' />
-      ) : (
-        <> </>
-      )}
-
-      <VStack align="start" spacing={6}>
+      <VStack align="start" spacing={6} p={4}>
         {/* Paginate This */}
         <SongGrid savedTracks={playlistData.savedTracks} />
-        <HStack>
-          <Button colorScheme={"green"} onClick={() => setGameMode("Standard")}>
+      </VStack>
+
+      <HStack pos="fixed" bottom={6} left={6}>
+          <Button size={"lg"} colorScheme={"green"} onClick={() => setGameMode("Standard")}>
             Standard Game
           </Button>
-          <Button colorScheme={"purple"} onClick={() => setGameMode("Casual")}>
+          <Button size={"lg"} colorScheme={"purple"} onClick={() => setGameMode("Casual")}>
             Casual Game
           </Button>
         </HStack>
-      </VStack>
-    </VStack>
+    </Grid>
   );
 };
 
