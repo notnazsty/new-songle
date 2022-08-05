@@ -1,8 +1,8 @@
 import { Grid, VStack } from "@chakra-ui/react";
 import { Song } from "models/spotify/songs";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { PaginatedList } from "react-paginated-list";
 import Searchbar from "../Searchbar";
-import SongCard from "../SongCard";
 import CasualCard from "./CasualCard";
 
 interface CasualGridProps {
@@ -10,21 +10,29 @@ interface CasualGridProps {
 }
 
 const CasualGrid: React.FC<CasualGridProps> = ({ songList }) => {
-
   const [searchSongList, setSearchSongList] = useState(songList);
 
   return (
     <VStack w="100%">
       <Searchbar songs={songList} setSongList={setSearchSongList} />;
-      <Grid
-        w="100%"
-        templateColumns={{ md: "repeat(2, 1fr)", xl: "repeat(2, 1fr)" }}
-        gridGap={4}
-      >
-        {searchSongList.map((song, i) => (
-          <CasualCard key={i} song={song} />
-        ))}
-      </Grid>
+      <PaginatedList
+        list={searchSongList}
+        itemsPerPage={12}
+        renderList={(list) => (
+          <Grid
+            w="100%"
+            templateColumns={{
+              base: "repeat(1, 1fr)",
+              sm: "repeat(2, 1fr)",
+            }}
+            gridGap={4}
+          >
+            {list.map((song, i) => (
+              <CasualCard key={i} song={song} />
+            ))}
+          </Grid>
+        )}
+      />
     </VStack>
   );
 };
