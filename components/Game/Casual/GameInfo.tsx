@@ -7,15 +7,15 @@ import { getSongLyrics } from "utils/genius/getLyrics";
 
 interface GameInfoProps {
   correctSong: Song;
+  songsGuessed: Song[];
+  numOfGuesses: number;
 }
 
-const GameInfo: React.FC<GameInfoProps> = ({ correctSong }) => {
+const GameInfo: React.FC<GameInfoProps> = ({ correctSong, songsGuessed, numOfGuesses }) => {
   const MAX_GUESSES = 6;
 
   const [songLyrics, setSongLyrics] = useState<string[] | null>(null);
   const [isLyricLoaded, setIsLyricLoaded] = useState(false);
-  const [numOfGuesses, setNumOfGuesses] = useState(0);
-  const [songsGuessed, setSongsGuessed] = useState<Song[]>([]);
 
   const updateLyrics = useCallback(async () => {
     if (!isLyricLoaded) {
@@ -71,7 +71,7 @@ const GameInfo: React.FC<GameInfoProps> = ({ correctSong }) => {
 
         {/* COPY PASTE REFACTOR EX. 1 */}
 
-        {songLyrics && isLyricLoaded &&  (
+        {songLyrics && isLyricLoaded && (
           <VStack align={"start"} w="100%" justifyContent="space-between">
             {songLyrics.map((line, i) => (
               <Text

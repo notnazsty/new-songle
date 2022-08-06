@@ -1,6 +1,15 @@
-import { Box, Grid, Stack, VStack, Text } from "@chakra-ui/react";
+import {
+  Image,
+  Grid,
+  Stack,
+  VStack,
+  Text,
+  Button,
+  HStack,
+} from "@chakra-ui/react";
 import { Song } from "models/spotify/songs";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { songSimilarities } from "utils/game/methods";
 import CasualGrid from "./CasualGrid";
 import GameInfo from "./GameInfo";
 
@@ -10,32 +19,122 @@ interface CasualGameProps {
 }
 
 const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
+  const [loading, setLoading] = useState(true);
+  const [correctSong, setCorrectSong] = useState<Song | null>(null);
+  const [songsGuessed, setSongsGuessed] = useState<Song[]>([]);
+  const [numOfGuesses, setNumOfGuesses] = useState(0);
+  const [hint, setHint] = useState("");
+  const [gameState, setGameState] = useState<"Playing" | "Win" | "Loss">(
+    "Playing"
+  );
 
+  // TODO Filter Song Options with Guesses
+
+  useEffect(() => {
+    if (loading) {
+      setCorrectSong(songList[Math.floor(Math.random() * songList.length)]);
+      setLoading(true);
+    }
+  }, [loading, songList]);
+
+  const handleGuess = (guess: Song) => {
+    if (correctSong) {
+      if (correctSong.name == guess.name) {
+        setGameState("Win");
+      } else {
+        if (numOfGuesses == 5) {
+          setGameState("Loss");
+        }
+        setSongsGuessed([...songsGuessed, guess]);
+        setNumOfGuesses((num) => num + 1);
+      }
+    }
+  };
+
+  const startNewGame = () => {
+    setGameState("Playing");
+    setCorrectSong(songList[Math.floor(Math.random() * songList.length)]);
+    setNumOfGuesses(0);
+    setSongsGuessed([]);
+    setHint("");
+  };
 
   return (
     <Grid templateColumns={{ lg: "300px 1fr" }} gridGap={12} px={4} py={2}>
-      <GameInfo correctSong={songList[0]} />
+      {correctSong && (
+        <GameInfo
+          correctSong={correctSong}
+          songsGuessed={songsGuessed}
+          numOfGuesses={numOfGuesses}
+        />
+      )}
+
       <VStack align="start" spacing={6}>
-        <Stack
-          w="100%"
-          direction={{ base: "column", lg: "row" }}
-          align={{ base: "start", lg: "center" }}
-          justify={{ lg: "space-between" }}
-        >
-          <Text
-            flexShrink={0}
-            mt={0}
-            fontSize={"4xl"}
-            fontWeight="bold"
-            lineHeight={{ lg: 0 }}
-          >
-            Make a Guess!
-          </Text>
-          <Box w="100%" maxW={{ lg: "xl" }}>
-            {/* <Searchbar /> */}
-          </Box>
-        </Stack>
-        <CasualGrid songList={songList} />
+        {gameState == "Playing" && (
+          <>
+            <Stack
+              w="100%"
+              direction={{ base: "column", lg: "row" }}
+              align={{ base: "start", lg: "center" }}
+              justify={{ lg: "space-between" }}
+            >
+              <Text
+                flexShrink={0}
+                mt={0}
+                fontSize={"4xl"}
+                fontWeight="bold"
+                lineHeight={{ lg: 0 }}
+              >
+                Make a Guess!
+              </Text>
+            </Stack>
+            <CasualGrid songList={songList} handleGuess={handleGuess} />
+          </>
+        )}
+        {gameState == "Win" && correctSong && (
+          <VStack>
+            <Text fontSize={"4xl"} fontWeight="bold">
+              You Won!!
+            </Text>
+            <Image
+              src={correctSong.coverImages[0].url}
+              alt={correctSong.name}
+              boxSize="sm"
+            />
+            <Text> {correctSong.name} </Text>
+
+            <HStack w="100%" justifyContent={"center"}>
+              <Button colorScheme="green" onClick={() => startNewGame()}>
+                Play Again
+              </Button>
+              <Button colorScheme="red" onClick={() => setGameMode("Base")}>
+                Back
+              </Button>
+            </HStack>
+          </VStack>
+        )}
+        {gameState == "Loss" && correctSong && (
+          <VStack w="100%" justifyContent={"center"}>
+            <Text fontSize={"4xl"} fontWeight="bold">
+              Correct Song
+            </Text>
+            <Image
+              src={correctSong.coverImages[0].url}
+              alt={correctSong.name}
+              boxSize="sm"
+            />
+            <Text> {correctSong.name} </Text>
+
+            <HStack w="100%" justifyContent={"center"}>
+              <Button colorScheme="green" onClick={() => startNewGame()}>
+                Play Again
+              </Button>
+              <Button colorScheme="red" onClick={() => setGameMode("Base")}>
+                Back
+              </Button>
+            </HStack>
+          </VStack>
+        )}
       </VStack>
     </Grid>
   );

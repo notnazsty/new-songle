@@ -4,10 +4,10 @@ import React from "react";
 
 interface CasualCardProps {
   song: Song;
+  handleGuess: (song: Song) => void;
 }
 
-const CasualCard: React.FC<CasualCardProps> = ({ song }) => {
- 
+const CasualCard: React.FC<CasualCardProps> = ({ song, handleGuess }) => {
   return (
     <HStack
       w="100%"
@@ -17,6 +17,7 @@ const CasualCard: React.FC<CasualCardProps> = ({ song }) => {
       overflow={"hidden"}
       cursor="pointer"
       _hover={{ borderColor: "blue.500" }}
+      onClick={() => handleGuess(song)}
     >
       <Box
         w="100%"

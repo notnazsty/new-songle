@@ -3,12 +3,10 @@ import {
   doc,
   query,
   where,
-  QueryConstraintType,
-  Query,
   DocumentData,
-  DocumentSnapshot,
   getDocs,
   QuerySnapshot,
+  limit,
 } from "firebase/firestore";
 import { QueryOperators } from "models/firebase/queries";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
@@ -55,7 +53,8 @@ export const getPlaylistsWithWhereQuery = async (
 ): Promise<QuerySnapshot<DocumentData>> => {
   const q = query(
     playlistsRef,
-    where(queryObject, queryOperator, queryRequirement)
+    where(queryObject, queryOperator, queryRequirement),
+    limit(20)
   );
 
   const querySnapshot = await getDocs(q);

@@ -7,9 +7,10 @@ import CasualCard from "./CasualCard";
 
 interface CasualGridProps {
   songList: Song[];
+  handleGuess: (guess: Song) => void;
 }
 
-const CasualGrid: React.FC<CasualGridProps> = ({ songList }) => {
+const CasualGrid: React.FC<CasualGridProps> = ({ songList, handleGuess }) => {
   const [searchSongList, setSearchSongList] = useState(songList);
 
   return (
@@ -28,7 +29,7 @@ const CasualGrid: React.FC<CasualGridProps> = ({ songList }) => {
             gridGap={4}
           >
             {list.map((song, i) => (
-              <CasualCard key={i} song={song} />
+              <CasualCard key={i} song={song} handleGuess={handleGuess} />
             ))}
           </Grid>
         )}
