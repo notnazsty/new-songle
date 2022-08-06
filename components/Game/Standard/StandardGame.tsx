@@ -16,7 +16,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { shuffle, getRandomLyrics } from "utils/game/methods";
+import areArraysEqual, { shuffle, getRandomLyrics } from "utils/game/methods";
 import { Song } from "../../../models/spotify/songs";
 import { getSongLyrics } from "../../../utils/genius/getLyrics";
 import SongOptions from "./SongOptions";
@@ -138,8 +138,6 @@ const StandardGame: React.FC<StandardGameProps> = ({
     }
   }, [correctSong, loaded, songListStack]);
 
-
-
   const updateCounts = () => {
     setNumberCorrect(numberCorrect + 1);
     const newScore = score + -1 * (timeLeft - maxTime) * 0.05 + 50;
@@ -152,10 +150,9 @@ const StandardGame: React.FC<StandardGameProps> = ({
   const handleGuess = (guess: Song) => {
     if (
       correctSong &&
+      guess.name === correctSong.name &&
       guess.album === correctSong.album &&
-      correctSong.name === guess.name &&
-      guess.artists == correctSong.artists &&
-      correctSong.releaseDate == guess.releaseDate
+      areArraysEqual(guess.artists, correctSong.artists, false)
     ) {
       songListStack.pop();
       const newStack = Array.from(songListStack);

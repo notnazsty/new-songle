@@ -10,7 +10,10 @@ import {
 import { SongSimilarity } from "models/methods";
 import { Song } from "models/spotify/songs";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { songSimilarities } from "utils/game/methods";
+import areArraysEqual, {
+  filterSongOptions,
+  songSimilarities,
+} from "utils/game/methods";
 import CasualGrid from "./CasualGrid";
 import GameInfo from "./GameInfo";
 
@@ -44,7 +47,11 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
 
   const handleGuess = (guess: Song) => {
     if (correctSong) {
-      if (correctSong.name == guess.name) {
+      if (
+        guess.name === correctSong.name &&
+        guess.album === correctSong.album &&
+        areArraysEqual(guess.artists, correctSong.artists, false)
+      ) {
         setGameState("Win");
       } else {
         if (numOfGuesses == 5) {
@@ -52,9 +59,21 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
         }
         setSongsGuessed([...songsGuessed, guess]);
         setNumOfGuesses((num) => num + 1);
+        const filteredSongOptions = filterSongOptions(
+          guess,
+          correctSong,
+          innerSongList
+        );
+        setInnerSongList(filteredSongOptions);
+        const hint = correctSong ? songSimilarities(guess, correctSong) : null;
+        setHint(hint);
       }
     }
   };
+
+  useEffect(() => {
+    console.log(innerSongList, songList);
+  }, [innerSongList, songList]);
 
   const startNewGame = () => {
     setGameState("Playing");
@@ -78,6 +97,7 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
           numOfGuesses={numOfGuesses}
           isLyricLoaded={isLyricLoaded}
           setIsLyricLoaded={setIsLyricLoaded}
+          hint={hint}
         />
       )}
 
@@ -104,7 +124,7 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
           </>
         )}
         {gameState == "Win" && correctSong && (
-          <VStack>
+          <VStack w="100%" justifyContent={"center"}>
             <Text fontSize={"4xl"} fontWeight="bold">
               You Won!!
             </Text>

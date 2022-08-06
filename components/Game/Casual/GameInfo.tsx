@@ -1,5 +1,6 @@
 import { CloseIcon } from "@chakra-ui/icons";
 import { Center, Divider, Grid, Spinner, Text, VStack } from "@chakra-ui/react";
+import { SongSimilarity } from "models/methods";
 import { Song } from "models/spotify/songs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { getRandomLyrics } from "utils/game/methods";
@@ -11,6 +12,7 @@ interface GameInfoProps {
   numOfGuesses: number;
   isLyricLoaded: boolean;
   setIsLyricLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+  hint: SongSimilarity | null;
 }
 
 const GameInfo: React.FC<GameInfoProps> = ({
@@ -18,7 +20,8 @@ const GameInfo: React.FC<GameInfoProps> = ({
   songsGuessed,
   numOfGuesses,
   isLyricLoaded,
-  setIsLyricLoaded
+  setIsLyricLoaded,
+  hint,
 }) => {
   const MAX_GUESSES = 6;
 
@@ -30,11 +33,10 @@ const GameInfo: React.FC<GameInfoProps> = ({
         name: correctSong.name,
         artists: correctSong.artists,
       });
-
-      setSongLyrics(getRandomLyrics(lyrics));
       setIsLyricLoaded(true);
+      setSongLyrics(getRandomLyrics(lyrics));
     }
-  }, [correctSong, isLyricLoaded]);
+  }, [correctSong, isLyricLoaded, setIsLyricLoaded]);
 
   useEffect(() => {
     updateLyrics();
@@ -76,8 +78,6 @@ const GameInfo: React.FC<GameInfoProps> = ({
           </Center>
         )}
 
-        {/* COPY PASTE REFACTOR EX. 1 */}
-
         {songLyrics && isLyricLoaded && (
           <VStack align={"start"} w="100%" justifyContent="space-between">
             {songLyrics.map((line, i) => (
@@ -100,8 +100,7 @@ const GameInfo: React.FC<GameInfoProps> = ({
           answer will appear here.
         </Text>
 
-        {/* <Text fontWeight={"bold"}>Hints</Text>
-       
+        <Text fontWeight={"bold"}>Hints</Text>
 
         {hint && hint.name.length > 0 && (
           <VStack>
@@ -117,7 +116,7 @@ const GameInfo: React.FC<GameInfoProps> = ({
           <VStack>
             <Text>Artists: {hint.artists.join(", ")}</Text>
           </VStack>
-        )} */}
+        )}
       </VStack>
     </VStack>
   );
