@@ -10,6 +10,7 @@ export interface PlaylistCollectionDoc {
   previousID: string | null;
   nextID: string | null;
   public: boolean 
+  popularity: number
 }
 
 interface Song {

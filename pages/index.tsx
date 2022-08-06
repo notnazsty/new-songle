@@ -37,8 +37,8 @@ const Home: NextPage = () => {
     if (loading && user) {
       setLoading(false);
 
-      let docs = await getPlaylistsWithWhereQuery("public", "!=", "true");
-      const playlistArr: PlaylistCollectionDoc[] = [];
+      let docs = await getPlaylistsWithWhereQuery("public", "==", true);
+      let playlistArr: PlaylistCollectionDoc[] = [];
       for (let i = 0; i < docs.size; i++) {
         const playlist: PlaylistCollectionDoc = (await docs.docs[
           i
@@ -52,18 +52,26 @@ const Home: NextPage = () => {
         const playlistIDs: string[] = await (
           userData.data() as AccountCollectionDoc
         ).playlistIDs;
-        const playlistsArr: PlaylistCollectionDoc[] = [];
+        let playlistsArr: PlaylistCollectionDoc[] = [];
+        console.log(playlistIDs)
         for (let i = 0; i < playlistIDs.length; i++) {
           const playlist: PlaylistCollectionDoc | void =
             await getFSPlaylistDataFromID(playlistIDs[i]);
+            console.log(playlist)
           if (playlist) {
-            playlistArr.push(playlist);
+            playlistsArr.push(playlist);
+          } else {
+            console.log("failed")
           }
         }
-        setPersonalPlaylists(playlistArr);
+        setPersonalPlaylists(playlistsArr);
       }
     }
   }, [loading, user]);
+
+  useEffect(() => {
+    console.log(personalPlaylists);
+  }, [personalPlaylists]);
 
   useEffect(() => {
     loadPlaylists();

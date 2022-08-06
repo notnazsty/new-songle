@@ -1,5 +1,5 @@
 import { Box, Button, Spinner } from "@chakra-ui/react";
-import { getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, setDoc } from "firebase/firestore";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -73,8 +73,6 @@ const AccountInit: NextPage = () => {
     loadPlaylistDataCallback();
   }, [loadPlaylistDataCallback]);
 
-
-
   useEffect(() => {
     if (!userData && user) {
       getDoc(doc(userRef, user.uid)).then((data) => {
@@ -88,6 +86,7 @@ const AccountInit: NextPage = () => {
       const mergedArr = [...playlistsData, savedTracksData];
 
       setUploadState("Uploading");
+      let uploadedPlaylistsIds: string[] = [];
 
       for (let i = 0; i < mergedArr.length; i++) {
         if (
@@ -105,6 +104,7 @@ const AccountInit: NextPage = () => {
                 savedTracks,
                 publicPlaylists.has(mergedArr[i].id)
               );
+              uploadedPlaylistsIds.push(mergedArr[i].id);
             }
           } else {
             const playlistSongs = await getPlaylistSongsFromID(
@@ -117,11 +117,26 @@ const AccountInit: NextPage = () => {
                 mergedArr[i],
                 publicPlaylists.has(mergedArr[i].id)
               );
+              uploadedPlaylistsIds.push(mergedArr[i].id);
             }
           }
-          setUploadState("Uploaded");
         }
       }
+      const newAccountData: AccountCollectionDoc = {
+        email: userData.email,
+        displayName: userData.displayName,
+        spotifyConnected: userData.spotifyConnected,
+        gameWins: userData.gameWins,
+        gameLosses: userData.gameLosses,
+        totalScore: userData.totalScore,
+        id: userData.id,
+        spotifyID: userData.spotifyID,
+        playlistIDs: uploadedPlaylistsIds,
+        usersSpotifyTokenData: userData.usersSpotifyTokenData,
+        spotifyProfileData: userData.spotifyProfileData,
+      };
+      await setDoc(doc(userRef, userData.id), newAccountData);
+      setUploadState("Uploaded");
     }
   };
 
@@ -134,13 +149,7 @@ const AccountInit: NextPage = () => {
       </Head>
 
       {loading && (
-        <Spinner
-          size="xl"
-          color="green.300"
-          thickness="4px"
-          speed="0.55s"
-          // emptyColor="gray.200"
-        />
+        <Spinner size="xl" color="green.300" thickness="4px" speed="0.55s" />
       )}
       {playlistsData && savedTracksData && uploadState == "Idle" && (
         <PlaylistSelect

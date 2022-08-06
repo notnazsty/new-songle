@@ -15,7 +15,9 @@ import { playlistsContRef, playlistsRef } from "../firebase";
 export const getFSPlaylistDataFromID = async (
   playlistID: string
 ): Promise<PlaylistCollectionDoc | void> => {
-  const initDoc = await getDoc(doc(playlistsRef, playlistID));
+  let id = playlistID.includes("_st0") ? playlistID : playlistID + "_0";
+
+  const initDoc = await getDoc(doc(playlistsRef, id));
 
   if (initDoc.exists()) {
     let docData = initDoc.data() as PlaylistCollectionDoc;
@@ -35,6 +37,7 @@ export const getFSPlaylistDataFromID = async (
           previousID: nextDocData.nextID,
           nextID: nextDocData.previousID,
           public: docData.public,
+          popularity: docData.popularity,
         };
         nextID = nextDocData.nextID;
       } else {
@@ -48,7 +51,7 @@ export const getFSPlaylistDataFromID = async (
 export const getPlaylistsWithWhereQuery = async (
   queryObject: string,
   queryOperator: QueryOperators,
-  queryRequirement: string
+  queryRequirement: any
 ): Promise<QuerySnapshot<DocumentData>> => {
   const q = query(
     playlistsRef,

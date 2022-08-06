@@ -4,7 +4,6 @@ import { TransformedPlaylistData } from "../../models/spotify/playlists";
 import { Song } from "../../models/spotify/songs";
 import { playlistsRef, playlistsContRef } from "../firebase";
 
-// Make public state updateable
 
 export const saveUserSavedTracks = async (
   userID: string,
@@ -22,6 +21,7 @@ export const saveUserSavedTracks = async (
       public: isPublic,
       images: null,
       name: "Saved Tracks",
+      popularity: 0,
     };
 
     await setDoc(doc(playlistsRef, savedTrackDoc.id), { ...savedTrackDoc });
@@ -49,6 +49,7 @@ export const saveUserSavedTracks = async (
       public: isPublic,
       images: null,
       name: "Saved Tracks",
+      popularity: 0,
     };
 
     await setDoc(doc(playlistsRef, savedTrackDoc.id), { ...savedTrackDoc });
@@ -64,6 +65,7 @@ export const saveUserSavedTracks = async (
         public: isPublic,
         images: null,
         name: "Saved Tracks",
+        popularity: 0,
       };
 
       await setDoc(doc(playlistsContRef, savedTrackDoc.id), {
@@ -89,6 +91,7 @@ export const saveUserPlaylist = async (
       public: isPublic,
       images: playlistData.images,
       name: playlistData.name,
+      popularity: 0,
     };
 
     await setDoc(doc(playlistsRef, savedPlaylistDoc.id), {
@@ -118,6 +121,7 @@ export const saveUserPlaylist = async (
       public: isPublic,
       images: playlistData.images,
       name: playlistData.name,
+      popularity: 0,
     };
 
     await setDoc(doc(playlistsRef, savedPlaylistDoc.id), {
@@ -135,6 +139,7 @@ export const saveUserPlaylist = async (
         public: isPublic,
         images: null,
         name: playlistData.name,
+        popularity: 0,
       };
 
       await setDoc(doc(playlistsContRef, savedPlaylistDoc.id), {
