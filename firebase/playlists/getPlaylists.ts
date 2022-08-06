@@ -15,7 +15,10 @@ import { playlistsContRef, playlistsRef } from "../firebase";
 export const getFSPlaylistDataFromID = async (
   playlistID: string
 ): Promise<PlaylistCollectionDoc | void> => {
-  let id = playlistID.includes("_st0") ? playlistID : playlistID + "_0";
+  let id =
+    playlistID.includes("_st0") || playlistID.includes("_0")
+      ? playlistID
+      : playlistID + "_0";
 
   const initDoc = await getDoc(doc(playlistsRef, id));
 

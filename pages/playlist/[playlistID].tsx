@@ -1,20 +1,9 @@
-import {
-  Box,
-  Heading,
-  Spinner,
-  VStack,
-  Text,
-  Image,
-  HStack,
-  Button,
-  Grid,
-  Stack,
-} from "@chakra-ui/react";
+import { Box, Spinner } from "@chakra-ui/react";
 import CasualGame from "components/Game/Casual/CasualGame";
 import { getDoc, doc } from "firebase/firestore";
 import { NextPage } from "next";
 import Head from "next/head";
-import  { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import PlaylistOverview from "../../components/Game/PlaylistOverview";
 import StandardGame from "../../components/Game/Standard/StandardGame";
@@ -41,7 +30,6 @@ const PlaylistPage: NextPage = () => {
       const playlistID = router.query.playlistID as string;
 
       if (playlistID) {
-
         const data = await getFSPlaylistDataFromID(playlistID);
 
         if (data) {
@@ -81,7 +69,14 @@ const PlaylistPage: NextPage = () => {
           <></>
         );
       case "Casual":
-        return playlistData? <CasualGame  songList={playlistData.savedTracks} setGameMode={setGameMode}/> : <></>;
+        return playlistData ? (
+          <CasualGame
+            songList={playlistData.savedTracks}
+            setGameMode={setGameMode}
+          />
+        ) : (
+          <></>
+        );
       default:
         const exhaustive: never = gameMode;
     }
