@@ -164,7 +164,6 @@ const StandardGame: React.FC<StandardGameProps> = ({
       songListStack.pop();
       const newStack = Array.from(songListStack);
       setSongListStack(newStack);
-      console.log("new stack", newStack);
 
       updateCounts();
 
@@ -209,11 +208,6 @@ const StandardGame: React.FC<StandardGameProps> = ({
                 justifyContent="space-between"
                 px={4}
               >
-                <Text fontSize="3xl">
-                  <Text color="green.100">
-                    {score} pts
-                  </Text>
-                </Text>
                 <HStack>
                   {new Array(3 - wrongAnswers).fill("_").map((val, i) => (
                     <Text fontSize="3xl" color="red" key={i}>
@@ -221,14 +215,26 @@ const StandardGame: React.FC<StandardGameProps> = ({
                     </Text>
                   ))}
                 </HStack>
+                <Text fontSize="3xl">
+                  <Text color="green.100">{score} pts</Text>
+                </Text>
               </HStack>
-              <Stack direction={["column", "row"]} py={{base: 6, md: 16}} align="center">
+              <Stack
+                direction={["column", "row"]}
+                py={{ base: 6, md: 16 }}
+                align="center"
+              >
                 <HStack mx={4} w="100px" py={4}>
                   <Timer timeLeft={timeLeft} />
                 </HStack>
                 <VStack w="100%" spacing={2} mt={4} mb={8} color="white">
                   {lyrics.map((line, i) => (
-                    <Text textAlign={"center"} key={i} fontStyle={"bold"} fontSize={"xl"}>
+                    <Text
+                      textAlign={"center"}
+                      key={i}
+                      fontStyle={"bold"}
+                      fontSize={"xl"}
+                    >
                       {line}
                     </Text>
                   ))}

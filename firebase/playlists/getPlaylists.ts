@@ -1,4 +1,16 @@
-import { getDoc, doc } from "firebase/firestore";
+import {
+  getDoc,
+  doc,
+  query,
+  where,
+  QueryConstraintType,
+  Query,
+  DocumentData,
+  DocumentSnapshot,
+  getDocs,
+  QuerySnapshot,
+} from "firebase/firestore";
+import { QueryOperators } from "models/firebase/queries";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
 import { playlistsContRef, playlistsRef } from "../firebase";
 
@@ -34,4 +46,19 @@ export const getFSPlaylistDataFromID = async (
     console.log(docData);
     return docData;
   }
+};
+
+export const getPlaylistsWithWhereQuery = async (
+  queryObject: string,
+  queryOperator: QueryOperators,
+  queryRequirement: string
+): Promise<QuerySnapshot<DocumentData>> => {
+  const q = query(
+    playlistsRef,
+    where(queryObject, queryOperator, queryRequirement)
+  );
+
+  const querySnapshot = await getDocs(q);
+
+  return querySnapshot;
 };

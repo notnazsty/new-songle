@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { collection, getFirestore } from "firebase/firestore";
+import * as firebase from 'firebase/app'
 
 const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN;
