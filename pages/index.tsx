@@ -1,4 +1,12 @@
-import { Box, Heading, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Grid,
+  Heading,
+  HStack,
+  Spinner,
+  VStack,
+} from "@chakra-ui/react";
 import PlaylistCard from "components/Playlists/PlaylistCard";
 import { userRef } from "../firebase/firebase";
 import { doc, getDoc, query, where } from "firebase/firestore";
@@ -35,7 +43,6 @@ const Home: NextPage = () => {
         const playlist: PlaylistCollectionDoc = (await docs.docs[
           i
         ].data()) as PlaylistCollectionDoc;
-        console.log(playlist);
         playlistArr.push(playlist);
       }
       setPlaylists(playlistArr);
@@ -70,23 +77,51 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Heading> Public Playlists </Heading>
-      {playlists && (
-        <HStack>
-          {playlists.map((playlist: PlaylistCollectionDoc) => (
-            <PlaylistCard playlist={playlist} key={playlist.id} />
-          ))}
-        </HStack>
+      {loading && !playlists && !personalPlaylists && (
+        <Spinner size="xl" color="orange" />
       )}
 
-      <Heading> Your Playlists </Heading>
+      {!loading && (
+        <VStack w="100%">
+          <Heading> Public Playlists </Heading>
+          {playlists && (
+            <Center w="100% ">
+              <Grid
+                px={4}
+                w="100%"
+                templateColumns={{
+                  sm: "repeat(3, 1fr)",
+                  md: "repeat(4, 1fr)",
+                  lg: "repeat(5, 1fr)",
+                  xl: "repeat(5, 1fr)",
+                }}
+              >
+                {playlists.map((playlist: PlaylistCollectionDoc) => (
+                  <PlaylistCard playlist={playlist} key={playlist.id} />
+                ))}
+              </Grid>
+            </Center>
+          )}
 
-      {personalPlaylists && (
-        <HStack>
-          {personalPlaylists.map((playlist: PlaylistCollectionDoc) => (
-            <PlaylistCard playlist={playlist} key={playlist.id} />
-          ))}
-        </HStack>
+          <Heading> Your Playlists </Heading>
+
+          {personalPlaylists && (
+            <Grid
+              mx={4}
+              w="100%"
+              templateColumns={{
+                sm: "repeat(3, 1fr)",
+                md: "repeat(4, 1fr)",
+                lg: "repeat(5, 1fr)",
+                xl: "repeat(5, 1fr)",
+              }}
+            >
+              {personalPlaylists.map((playlist: PlaylistCollectionDoc) => (
+                <PlaylistCard playlist={playlist} key={playlist.id} />
+              ))}
+            </Grid>
+          )}
+        </VStack>
       )}
     </Box>
   );

@@ -9,13 +9,20 @@ interface GameInfoProps {
   correctSong: Song;
   songsGuessed: Song[];
   numOfGuesses: number;
+  isLyricLoaded: boolean;
+  setIsLyricLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const GameInfo: React.FC<GameInfoProps> = ({ correctSong, songsGuessed, numOfGuesses }) => {
+const GameInfo: React.FC<GameInfoProps> = ({
+  correctSong,
+  songsGuessed,
+  numOfGuesses,
+  isLyricLoaded,
+  setIsLyricLoaded
+}) => {
   const MAX_GUESSES = 6;
 
   const [songLyrics, setSongLyrics] = useState<string[] | null>(null);
-  const [isLyricLoaded, setIsLyricLoaded] = useState(false);
 
   const updateLyrics = useCallback(async () => {
     if (!isLyricLoaded) {

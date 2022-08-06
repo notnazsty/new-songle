@@ -53,7 +53,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const refreshTokenData = useCallback(async () => {
-    console.log(userData);
     if (
       userData &&
       userData.usersSpotifyTokenData &&
@@ -67,7 +66,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         );
 
         const tokenData = await req.json();
-        console.log(tokenData);
         if ("access_token" in tokenData) {
           const tknData = tokenData as SpotifyTokenResponse;
           const spotifyTokenData: UsersSpotifyTokenData = {

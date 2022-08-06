@@ -7,6 +7,7 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react";
+import { SongSimilarity } from "models/methods";
 import { Song } from "models/spotify/songs";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { songSimilarities } from "utils/game/methods";
@@ -19,23 +20,27 @@ interface CasualGameProps {
 }
 
 const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
+  const [innerSongList, setInnerSongList] = useState(songList);
   const [loading, setLoading] = useState(true);
   const [correctSong, setCorrectSong] = useState<Song | null>(null);
   const [songsGuessed, setSongsGuessed] = useState<Song[]>([]);
   const [numOfGuesses, setNumOfGuesses] = useState(0);
-  const [hint, setHint] = useState("");
+  const [hint, setHint] = useState<SongSimilarity | null>(null);
   const [gameState, setGameState] = useState<"Playing" | "Win" | "Loss">(
     "Playing"
   );
+  const [isLyricLoaded, setIsLyricLoaded] = useState(false);
 
   // TODO Filter Song Options with Guesses
 
   useEffect(() => {
     if (loading) {
-      setCorrectSong(songList[Math.floor(Math.random() * songList.length)]);
-      setLoading(true);
+      setCorrectSong(
+        innerSongList[Math.floor(Math.random() * innerSongList.length)]
+      );
+      setLoading(false);
     }
-  }, [loading, songList]);
+  }, [innerSongList, loading]);
 
   const handleGuess = (guess: Song) => {
     if (correctSong) {
@@ -53,10 +58,15 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
 
   const startNewGame = () => {
     setGameState("Playing");
-    setCorrectSong(songList[Math.floor(Math.random() * songList.length)]);
+    setInnerSongList(songList);
+    setIsLyricLoaded(false);
+
+    setCorrectSong(
+      innerSongList[Math.floor(Math.random() * innerSongList.length)]
+    );
     setNumOfGuesses(0);
     setSongsGuessed([]);
-    setHint("");
+    setHint(null);
   };
 
   return (
@@ -66,6 +76,8 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
           correctSong={correctSong}
           songsGuessed={songsGuessed}
           numOfGuesses={numOfGuesses}
+          isLyricLoaded={isLyricLoaded}
+          setIsLyricLoaded={setIsLyricLoaded}
         />
       )}
 
@@ -88,7 +100,7 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
                 Make a Guess!
               </Text>
             </Stack>
-            <CasualGrid songList={songList} handleGuess={handleGuess} />
+            <CasualGrid songList={innerSongList} handleGuess={handleGuess} />
           </>
         )}
         {gameState == "Win" && correctSong && (

@@ -63,7 +63,6 @@ const StandardGame: React.FC<StandardGameProps> = ({
       }
     }
     setOptions(shuffle([correctOption, ...randOpts]));
-    console.log([correctSong, ...randOpts]);
     getSongLyrics({
       name: correctOption.name,
       artists: correctOption.artists,
@@ -71,7 +70,7 @@ const StandardGame: React.FC<StandardGameProps> = ({
       setLyrics(getRandomLyrics(lyric));
       setIsLyricLoaded(true);
     });
-  }, [correctSong, songList, songListStack]);
+  }, [songList, songListStack]);
 
   const outOfTimeUpdate = useCallback(() => {
     if (wrongAnswers < 2) {
@@ -127,7 +126,6 @@ const StandardGame: React.FC<StandardGameProps> = ({
         }
       }
       setOptions(shuffle([songListStack[correctSongIndex], ...randOpts]));
-      console.log([correctSong, ...randOpts]);
       getSongLyrics({
         name: songListStack[correctSongIndex].name,
         artists: songListStack[correctSongIndex].artists,
@@ -140,9 +138,7 @@ const StandardGame: React.FC<StandardGameProps> = ({
     }
   }, [correctSong, loaded, songListStack]);
 
-  useEffect(() => {
-    console.log(correctSong);
-  }, [correctSong]);
+
 
   const updateCounts = () => {
     setNumberCorrect(numberCorrect + 1);

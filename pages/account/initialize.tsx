@@ -73,10 +73,7 @@ const AccountInit: NextPage = () => {
     loadPlaylistDataCallback();
   }, [loadPlaylistDataCallback]);
 
-  useEffect(() => {
-    console.log(playlistsData);
-    console.log(savedTracksData);
-  }, [playlistsData, savedTracksData]);
+
 
   useEffect(() => {
     if (!userData && user) {

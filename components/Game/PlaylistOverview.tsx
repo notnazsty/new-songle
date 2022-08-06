@@ -21,24 +21,22 @@ const PlaylistOverview: React.FC<PlaylistOverviewProps> = ({
 }) => {
   return (
     <Grid w="100%" templateColumns={{ lg: "500px auto" }}>
-      <Center>
-        <VStack align={"stretch"} p={4} h='100%' maxH='100vh'>
-          <Heading textAlign={{ base: "center", md: "start" }}>
-            {" "}
-            {playlistData.name}{" "}
-          </Heading>
+      <VStack align={"stretch"} p={4} h="100%" maxH="100vh">
+        <Heading textAlign={{ base: "center", md: "start" }}>
+          {" "}
+          {playlistData.name}{" "}
+        </Heading>
 
-          {playlistData.images ? (
-            <Image
-              src={playlistData.images[0].url}
-              alt={playlistData.name}
-              boxSize="sm"
-            />
-          ) : (
-            <> </>
-          )}
-        </VStack>
-      </Center>
+        {playlistData.images ? (
+          <Image
+            src={playlistData.images[0].url}
+            alt={playlistData.name}
+            boxSize="sm"
+          />
+        ) : (
+          <> </>
+        )}
+      </VStack>
 
       <VStack align="start" spacing={6} p={4}>
         <SongGrid savedTracks={playlistData.savedTracks} />

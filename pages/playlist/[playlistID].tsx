@@ -41,13 +41,11 @@ const PlaylistPage: NextPage = () => {
       const playlistID = router.query.playlistID as string;
 
       if (playlistID) {
-        console.log(playlistData);
 
         const data = await getFSPlaylistDataFromID(playlistID);
 
         if (data) {
           setPlaylistData(data);
-          console.log(playlistData);
           setSongList(shuffle(data.savedTracks));
         }
 
@@ -56,7 +54,7 @@ const PlaylistPage: NextPage = () => {
         // Load and update playlist leaderboard data etc player high score too
       }
     }
-  }, [loading, playlistData, router.query.playlistID]);
+  }, [loading, router.query.playlistID]);
 
   useEffect(() => {
     loadPlaylist();

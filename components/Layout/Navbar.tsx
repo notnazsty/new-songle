@@ -16,10 +16,13 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import { signin } from "../../firebase/signIn";
 import { getDoc, doc } from "firebase/firestore";
 import { AccountCollectionDoc } from "../../models/firebase/account";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const { user } = useUser();
   const [userData, setUserData] = useState<AccountCollectionDoc | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!userData && user) {
@@ -39,7 +42,12 @@ const Navbar = () => {
       bg={"black"}
       color="gray.300"
     >
-      <Text fontSize={"2xl"} fontWeight={"bold"}>
+      <Text
+        fontSize={"2xl"}
+        fontWeight={"bold"}
+        onClick={() => router.push("/")}
+        cursor="pointer"
+      >
         Songle
       </Text>
 
@@ -55,7 +63,16 @@ const Navbar = () => {
           </MenuButton>
           <MenuList bg="gray.900" borderColor={"gray.700"}>
             <Center>
-              <Avatar size={"xl"} src={userData && userData.spotifyConnected && userData.spotifyProfileData? userData.spotifyProfileData.images[0].url : ''} />
+              <Avatar
+                size={"xl"}
+                src={
+                  userData &&
+                  userData.spotifyConnected &&
+                  userData.spotifyProfileData
+                    ? userData.spotifyProfileData.images[0].url
+                    : ""
+                }
+              />
             </Center>
             <br />
             <Center>

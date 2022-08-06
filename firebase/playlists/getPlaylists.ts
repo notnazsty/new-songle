@@ -41,7 +41,6 @@ export const getFSPlaylistDataFromID = async (
         break;
       }
     }
-    console.log(docData);
     return docData;
   }
 };

@@ -254,9 +254,7 @@ const transformPlaylistResponseToSongArray = (
         artists: item.track.artists.map((artist) => artist.name),
       };
       ouput.push(songObject);
-    } else {
-      console.log(item);
-    }
+    } 
   });
 
   return ouput;

@@ -27,9 +27,7 @@ const PlaylistSelect: React.FC<PlaylistSelectProps> = ({
           publicPlaylists.add(playlist.id);
           setPublicPlaylists(new Set(publicPlaylists));
         }
-        console.log(playlist.name);
       });
-      console.log(publicPlaylists);
       setLoading(false);
     }
   }, [loading, playlists, publicPlaylists, setPublicPlaylists]);
