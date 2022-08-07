@@ -52,14 +52,9 @@ const Navbar = () => {
       </Text>
 
       <HStack spacing={6}>
-        {/* <HStack color="gray.400">
-                    <Link href='https://github.com/notnazsty/new-songle' isExternal>Github</Link>
-                </HStack> */}
-
         <Menu>
           <MenuButton>
             <HamburgerIcon boxSize={8} />
-            {/* <Avatar boxSize={12} /> */}
           </MenuButton>
           <MenuList bg="gray.900" borderColor={"gray.700"}>
             <Center>
@@ -97,6 +92,7 @@ const Navbar = () => {
                 _focus={{ bg: "gray.700" }}
                 onClick={() => {
                   auth.signOut();
+                  router.reload();
                 }}
               >
                 Sign Out

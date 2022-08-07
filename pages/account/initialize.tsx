@@ -74,11 +74,15 @@ const AccountInit: NextPage = () => {
   }, [loadPlaylistDataCallback]);
 
   useEffect(() => {
+    if (userData && userData.playlistIDs.length > 0) {
+      router.back()
+    }
+
     if (!userData && user) {
       getDoc(doc(userRef, user.uid)).then((data) => {
         setUserData(data.data() as AccountCollectionDoc);
       });
-    }
+    } 
   }, [user, userData]);
 
   const uploadPlaylists = async () => {

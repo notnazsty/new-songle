@@ -7,6 +7,7 @@ import {
   getDocs,
   QuerySnapshot,
   limit,
+  orderBy,
 } from "firebase/firestore";
 import { QueryOperators } from "models/firebase/queries";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
@@ -59,7 +60,8 @@ export const getPlaylistsWithWhereQuery = async (
   const q = query(
     playlistsRef,
     where(queryObject, queryOperator, queryRequirement),
-    limit(20)
+    limit(20),
+    orderBy("popularity","desc")
   );
 
   const querySnapshot = await getDocs(q);

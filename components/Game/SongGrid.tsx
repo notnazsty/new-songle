@@ -10,11 +10,10 @@ interface SongGridProps {
 }
 
 const SongGrid: React.FC<SongGridProps> = ({ savedTracks }) => {
-  //UPDATE IT TO WORK WITH DIFF SCREEN SIZES
 
   const [songList, setSongList] = useState<Song[]>([]);
 
-  // Use Styled Components To Style This
+  // TODO Use Styled Components To Style This
 
 
   return (
@@ -40,7 +39,6 @@ const SongGrid: React.FC<SongGridProps> = ({ savedTracks }) => {
         
       }
       />
-
     
     </VStack>
   );
