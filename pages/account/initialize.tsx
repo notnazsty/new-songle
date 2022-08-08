@@ -83,7 +83,7 @@ const AccountInit: NextPage = () => {
         setUserData(data.data() as AccountCollectionDoc);
       });
     } 
-  }, [user, userData]);
+  }, [router, user, userData]);
 
   const uploadPlaylists = async () => {
     if (playlistsData && user && userData && savedTracksData) {

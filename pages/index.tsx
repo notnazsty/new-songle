@@ -30,6 +30,7 @@ import {
 import Image from "next/image";
 import PlaylistQuerySearchbar from "components/HomePage/PlaylistQuerySearchbar";
 import Navbar from "components/Layout/Navbar";
+import PlaylistCarousel from "components/HomePage/PlaylistCarousel";
 
 const Home: NextPage = () => {
   const { user } = useUser();
@@ -104,12 +105,12 @@ const Home: NextPage = () => {
           bgPos="center"
         />
         {/* <Image src={gif} alt="spotify" /> */}
-          {/*
+        {/*
               USE RALEWAY FOR FONT
               https://www.designyourway.net/blog/typography/spotify-font/#:~:text=Raleway,it%20for%20big%20display%20purposes.
           */}
 
-        <Text> This website is still under development.</Text>
+        <Text pt={8}> This website is still under development.</Text>
       </VStack>
 
       {!user && (
@@ -126,7 +127,7 @@ const Home: NextPage = () => {
             w="100%"
             bgColor="green.700"
             p={6}
-            px={{md: 16}}
+            px={{ md: 16 }}
             flexShrink={1}
             flexGrow={0}
             align="center"
@@ -134,14 +135,21 @@ const Home: NextPage = () => {
           >
             <Text
               fontSize={{ base: "3xl", sm: "4xl", md: "5xl" }}
-              textAlign={{base: "center", md: "left"}}
+              textAlign={{ base: "center", md: "left" }}
               color="pink.100"
               fontWeight={"medium"}
             >
               Test Your Playlist Knowledge
             </Text>
             <Box boxSize={"180px"} pos="relative">
-              <Icon pos="absolute" left={0} bottom={0} boxSize={"160px"} color="pink.300" zIndex={12}>
+              <Icon
+                pos="absolute"
+                left={0}
+                bottom={0}
+                boxSize={"160px"}
+                color="pink.300"
+                zIndex={12}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -156,7 +164,13 @@ const Home: NextPage = () => {
                   />
                 </svg>
               </Icon>
-              <Icon pos="absolute" boxSize={"40px"} color="pink.400" top={4} left={8}>
+              <Icon
+                pos="absolute"
+                boxSize={"40px"}
+                color="pink.400"
+                top={4}
+                left={8}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -171,7 +185,13 @@ const Home: NextPage = () => {
                   />
                 </svg>
               </Icon>
-              <Icon pos="absolute" boxSize={"48px"} color="pink.200" left={3} bottom={16}>
+              <Icon
+                pos="absolute"
+                boxSize={"48px"}
+                color="pink.200"
+                left={3}
+                bottom={16}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -186,7 +206,13 @@ const Home: NextPage = () => {
                   />
                 </svg>
               </Icon>
-              <Icon pos="absolute" boxSize={"48px"} color="pink.100" right={0} top={3}>
+              <Icon
+                pos="absolute"
+                boxSize={"48px"}
+                color="pink.100"
+                right={0}
+                top={3}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -229,23 +255,32 @@ const Home: NextPage = () => {
 
       {user && (
         <>
-          {loading && !playlists && !personalPlaylists && (
-            <Spinner size="xl" color="orange" />
-          )}
+          {loading ||
+            !playlists ||
+            (!personalPlaylists && (
+              <Center p={8}>
+                <Spinner size="xl" color="orange" />
+              </Center>
+            ))}
 
-          {!loading && (
-            <VStack w="100%" py={{ base: 8, md: 16 }} alignItems="center">
+          {!loading && playlists && personalPlaylists && (
+            <VStack w="100%" py={{ base: 4, md: 8 }} alignItems="center">
               <Box maxW="6xl" w="100%" p={4}>
                 {/* Add Search Bar Stuff Here */}
                 <PlaylistQuerySearchbar />
               </Box>
 
-              <VStack maxW="6xl" w="100%" p={4}  justifyContent={"left"} alignItems="left">
-                <Text fontSize="2xl">
-                  Popular Playlists
-                </Text>
-              </VStack>
-              {playlists && (
+              <PlaylistCarousel
+                name="Popular Playlists"
+                playlists={playlists}
+              />
+
+              <PlaylistCarousel
+                name="Your Playlists"
+                playlists={personalPlaylists}
+              />
+
+              {/* {playlists && (
                 <Center maxW="6xl" w="100%" p={4}>
                   <Grid
                     w="100%"
@@ -262,17 +297,23 @@ const Home: NextPage = () => {
                     ))}
                   </Grid>
                 </Center>
-              )}
-
+              )} */}
+              {/* 
               {personalPlaylists && (
                 <>
-                  <VStack maxW="6xl" w="100%" p={4} justifyContent={"left"} alignItems="left">
-                    <Text fontSize="2xl">
-                      Your Playlists
-                    </Text>
+                  <VStack
+                    maxW="6xl"
+                    w="100%"
+                    p={4}
+                    justifyContent={"left"}
+                    alignItems="left"
+                  >
+                    <Text fontSize="2xl">Your Playlists</Text>
                   </VStack>
                   <Grid
-                    maxW="6xl" w="100%" p={4}
+                    maxW="6xl"
+                    w="100%"
+                    p={4}
                     templateColumns={{
                       sm: "repeat(3, 1fr)",
                       md: "repeat(4, 1fr)",
@@ -287,7 +328,7 @@ const Home: NextPage = () => {
                     )}
                   </Grid>
                 </>
-              )}
+              )} */}
             </VStack>
           )}
         </>
