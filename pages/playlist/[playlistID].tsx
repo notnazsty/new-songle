@@ -1,5 +1,6 @@
 import { Box, Spinner } from "@chakra-ui/react";
 import CasualGame from "components/Game/Casual/CasualGame";
+import Navbar from "components/Layout/Navbar";
 import { getDoc, doc } from "firebase/firestore";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -84,6 +85,7 @@ const PlaylistPage: NextPage = () => {
 
   return (
     <Box bg={"black"} color="gray.300" minH="100vh">
+      <Navbar maxWidth="100%" />
       <Head>
         {playlistData ? (
           <title> {playlistData.name} </title>

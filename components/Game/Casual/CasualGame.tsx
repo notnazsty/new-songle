@@ -101,7 +101,7 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
         />
       )}
 
-      <VStack align="start" spacing={6}>
+      <VStack align="stretch" spacing={6}>
         {gameState == "Playing" && (
           <>
             <Stack

@@ -1,4 +1,5 @@
 import { Box, Button } from '@chakra-ui/react'
+import Navbar from 'components/Layout/Navbar';
 import { getDoc, doc } from 'firebase/firestore';
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -35,6 +36,8 @@ const Account: NextPage = () => {
         <meta name="Account Page" content="Account Page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <Navbar maxWidth="6xl" />
 
 
 

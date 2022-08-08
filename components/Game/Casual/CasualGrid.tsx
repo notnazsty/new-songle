@@ -14,7 +14,7 @@ const CasualGrid: React.FC<CasualGridProps> = ({ songList, handleGuess }) => {
   const [searchSongList, setSearchSongList] = useState(songList);
 
   return (
-    <VStack w="100%">
+    <VStack w="100%" align={"stretch"}>
       <Searchbar songs={songList} setSongList={setSearchSongList} />;
       <PaginatedList
         list={searchSongList}
