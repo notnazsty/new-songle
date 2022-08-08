@@ -104,19 +104,12 @@ const Home: NextPage = () => {
           bgPos="center"
         />
         {/* <Image src={gif} alt="spotify" /> */}
-        <VStack pos="absolute" justifyContent="space-between" h="100%">
           {/*
               USE RALEWAY FOR FONT
               https://www.designyourway.net/blog/typography/spotify-font/#:~:text=Raleway,it%20for%20big%20display%20purposes.
           */}
-          <Text
-            fontSize={{ base: "2xl", md: "6xl" }}
-            color="white"
-            fontWeight={"bold"}
-          >
-            {/* Test Your Playlist Knowledge */}
-          </Text>
-        </VStack>
+
+        <Text> This website is still under development.</Text>
       </VStack>
 
       {!user && (
