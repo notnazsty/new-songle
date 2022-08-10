@@ -1,5 +1,5 @@
 import { onAuthStateChanged, User } from "firebase/auth";
-import { getDoc, doc, setDoc } from "firebase/firestore";
+import { getDoc, doc, setDoc, onSnapshot } from "firebase/firestore";
 import React, {
   createContext,
   ReactNode,
@@ -15,9 +15,14 @@ import {
 } from "../models/firebase/account";
 import { SpotifyTokenResponse } from "../models/spotify/user";
 
-const authContext = createContext<{ user: User | null; loading: boolean }>({
+const authContext = createContext<{
+  user: User | null;
+  loading: boolean;
+  userData: AccountCollectionDoc | null;
+}>({
   user: null,
   loading: true,
+  userData: null,
 });
 
 export const useUser = () => {
@@ -33,9 +38,12 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      getDoc(doc(userRef, user.uid)).then((data) => {
-        setUserData(data.data() as AccountCollectionDoc);
+      const unsub = onSnapshot(doc(userRef, user.uid), (doc) => {
+        const data = doc.data() as AccountCollectionDoc;
+        setUserData(data);
       });
+
+      return unsub;
     } else {
       setUserData(null);
     }
@@ -53,12 +61,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const refreshTokenData = useCallback(async () => {
-    if (
-      userData &&
-      userData.usersSpotifyTokenData &&
-      userData.usersSpotifyTokenData.refreshToken &&
-      user
-    ) {
+    if (userData?.usersSpotifyTokenData?.refreshToken && user) {
       try {
         const req = await fetch(
           "/api/refreshSpotifyToken?refresh_token=" +
@@ -85,7 +88,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         console.log(error);
       }
     }
-  }, [user, userData]);
+  }, [user, userData?.usersSpotifyTokenData?.refreshToken]);
 
   useEffect(() => {
     refreshTokenData();
@@ -98,7 +101,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, [refreshTokenData]);
 
   return (
-    <authContext.Provider value={{ user, loading }}>
+    <authContext.Provider value={{ user, loading, userData }}>
       {children}
     </authContext.Provider>
   );

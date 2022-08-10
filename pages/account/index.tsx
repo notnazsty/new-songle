@@ -14,8 +14,7 @@ import { AccountCollectionDoc } from "../../models/firebase/account";
 import PlaylistCarousel from "components/HomePage/PlaylistCarousel";
 
 const Account: NextPage = () => {
-  const { user } = useUser();
-  const [userData, setUserData] = useState<AccountCollectionDoc | null>(null);
+  const { user, userData } = useUser();
   const [personalPlaylists, setPersonalPlaylists] = useState<
     PlaylistCollectionDoc[] | null
   >(null);
@@ -48,14 +47,6 @@ const Account: NextPage = () => {
   useEffect(() => {
     loadPlaylists();
   }, [loadPlaylists]);
-
-  useEffect(() => {
-    if (!userData && user) {
-      getDoc(doc(userRef, user.uid)).then((data) => {
-        setUserData(data.data() as AccountCollectionDoc);
-      });
-    }
-  }, [user, userData]);
 
   return (
     <Box bg={"black"} color="gray.300" minH="100vh" w="100%">

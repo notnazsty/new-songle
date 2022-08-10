@@ -23,19 +23,10 @@ interface Props {
   maxWidth: string;
 }
 
-const Navbar : React.FC<Props> = ({maxWidth = "6xl"}) => {
-  const { user } = useUser();
-  const [userData, setUserData] = useState<AccountCollectionDoc | null>(null);
+const Navbar: React.FC<Props> = ({ maxWidth = "6xl" }) => {
+  const { user, userData } = useUser();
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (!userData && user) {
-      getDoc(doc(userRef, user.uid)).then((data) => {
-        setUserData(data.data() as AccountCollectionDoc);
-      });
-    }
-  }, [user, userData]);
 
   return (
     <Box bg={"black"}>
@@ -79,7 +70,10 @@ const Navbar : React.FC<Props> = ({maxWidth = "6xl"}) => {
               </Center>
               <Center pt={3} pb={2}>
                 {user && (
-                  <Text fontSize={"lg"} fontWeight="medium"> {user.displayName ? user.displayName : "User"} </Text>
+                  <Text fontSize={"lg"} fontWeight="medium">
+                    {" "}
+                    {user.displayName ? user.displayName : "User"}{" "}
+                  </Text>
                 )}
               </Center>
               <MenuDivider />
@@ -99,7 +93,6 @@ const Navbar : React.FC<Props> = ({maxWidth = "6xl"}) => {
                   _hover={{ bg: "gray.700" }}
                   _focus={{ bg: "gray.700" }}
                   fontSize="sm"
-
                   onClick={() => {
                     auth.signOut();
                     router.reload();
