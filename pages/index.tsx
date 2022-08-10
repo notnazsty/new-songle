@@ -1,21 +1,15 @@
 import {
   Box,
   Center,
-  Grid,
-  Heading,
   Spinner,
-  Image as ChakraImage,
   VStack,
   Text,
   Button,
-  HStack,
   Stack,
   Icon,
 } from "@chakra-ui/react";
-import gif from "../public/spotifyBanner.gif";
-import PlaylistCard from "components/HomePage/PlaylistCard";
 import { userRef } from "../firebase/firebase";
-import { doc, getDoc, query, where } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { AccountCollectionDoc } from "models/firebase/account";
 import { PlaylistCollectionDoc } from "models/firebase/playlists";
 import type { NextPage } from "next";
@@ -27,7 +21,6 @@ import {
   getFSPlaylistDataFromID,
   getPlaylistsWithWhereQuery,
 } from "../firebase/playlists/getPlaylists";
-import Image from "next/image";
 import PlaylistQuerySearchbar from "components/HomePage/PlaylistQuerySearchbar";
 import Navbar from "components/Layout/Navbar";
 import PlaylistCarousel from "components/HomePage/PlaylistCarousel";
@@ -62,25 +55,17 @@ const Home: NextPage = () => {
           userData.data() as AccountCollectionDoc
         ).playlistIDs;
         let playlistsArr: PlaylistCollectionDoc[] = [];
-        console.log(playlistIDs);
         for (let i = 0; i < playlistIDs.length; i++) {
           const playlist: PlaylistCollectionDoc | void =
             await getFSPlaylistDataFromID(playlistIDs[i]);
-          console.log(playlist);
           if (playlist) {
             playlistsArr.push(playlist);
-          } else {
-            console.log("failed");
           }
         }
         setPersonalPlaylists(playlistsArr);
       }
     }
   }, [loading, user]);
-
-  useEffect(() => {
-    console.log(personalPlaylists);
-  }, [personalPlaylists]);
 
   useEffect(() => {
     loadPlaylists();
@@ -104,12 +89,10 @@ const Home: NextPage = () => {
           bgSize={"cover"}
           bgPos="center"
         />
-        {/* <Image src={gif} alt="spotify" /> */}
         {/*
               USE RALEWAY FOR FONT
               https://www.designyourway.net/blog/typography/spotify-font/#:~:text=Raleway,it%20for%20big%20display%20purposes.
           */}
-
         <Text pt={8}> This website is still under development.</Text>
       </VStack>
 
@@ -229,7 +212,6 @@ const Home: NextPage = () => {
               </Icon>
             </Box>
           </Stack>
-          {/* <ChakraImage src="/banner.gif" alt="banner" /> */}
           <VStack minW="min(100vw, 300px)" p={4} justify="center">
             <Button
               colorScheme={"purple"}
@@ -279,56 +261,6 @@ const Home: NextPage = () => {
                 name="Your Playlists"
                 playlists={personalPlaylists}
               />
-
-              {/* {playlists && (
-                <Center maxW="6xl" w="100%" p={4}>
-                  <Grid
-                    w="100%"
-                    templateColumns={{
-                      sm: "repeat(3, 1fr)",
-                      md: "repeat(4, 1fr)",
-                      lg: "repeat(5, 1fr)",
-                      xl: "repeat(5, 1fr)",
-                    }}
-                    gap={6}
-                  >
-                    {playlists.map((playlist: PlaylistCollectionDoc) => (
-                      <PlaylistCard playlist={playlist} key={playlist.id} />
-                    ))}
-                  </Grid>
-                </Center>
-              )} */}
-              {/* 
-              {personalPlaylists && (
-                <>
-                  <VStack
-                    maxW="6xl"
-                    w="100%"
-                    p={4}
-                    justifyContent={"left"}
-                    alignItems="left"
-                  >
-                    <Text fontSize="2xl">Your Playlists</Text>
-                  </VStack>
-                  <Grid
-                    maxW="6xl"
-                    w="100%"
-                    p={4}
-                    templateColumns={{
-                      sm: "repeat(3, 1fr)",
-                      md: "repeat(4, 1fr)",
-                      lg: "repeat(5, 1fr)",
-                      xl: "repeat(5, 1fr)",
-                    }}
-                  >
-                    {personalPlaylists.map(
-                      (playlist: PlaylistCollectionDoc) => (
-                        <PlaylistCard playlist={playlist} key={playlist.id} />
-                      )
-                    )}
-                  </Grid>
-                </>
-              )} */}
             </VStack>
           )}
         </>

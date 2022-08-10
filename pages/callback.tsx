@@ -93,13 +93,6 @@ const Callback: NextPage = () => {
         <Spinner size="xl" color="green" />
       </Center>
 
-      {/* <Button onClick={async () => {
-
-        if (refreshToken.length > 2) {
-          const data = await fetch("/api/spotifyRefreshToken?refresh_token=" + encodeURI(refreshToken))
-          console.log(await data.json())
-        }
-      }}> Refresh </Button> */}
     </Box>
   );
 };

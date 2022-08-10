@@ -71,10 +71,6 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
     }
   };
 
-  useEffect(() => {
-    console.log(innerSongList, songList);
-  }, [innerSongList, songList]);
-
   const startNewGame = () => {
     setGameState("Playing");
     setInnerSongList(songList);

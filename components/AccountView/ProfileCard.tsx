@@ -1,8 +1,5 @@
 import {
   Center,
-  Text,
-  Box,
-  useColorModeValue,
   Avatar,
   Heading,
   Stack,
@@ -11,7 +8,8 @@ import {
   BoxProps,
   VStack,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React from "react";
 import { AccountCollectionDoc } from "../../models/firebase/account";
 import { loginURL } from "../../utils/spotify/auth";
 
@@ -20,6 +18,8 @@ interface ProfileCardProps extends BoxProps {
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ account }) => {
+  const router = useRouter();
+
   return (
     <Center py={6}>
       <Stack
@@ -48,10 +48,22 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ account }) => {
             {account.displayName}
           </Heading>
           <Stack align={"center"} justify={"center"} direction={"row"} pt={1}>
-            <Badge bg="gray.800" px={2} py={1} color="gray.300" fontWeight={"400"}>
+            <Badge
+              bg="gray.800"
+              px={2}
+              py={1}
+              color="gray.300"
+              fontWeight={"400"}
+            >
               {account.gameWins + account.gameLosses + " games played"}
             </Badge>
-            <Badge px={2} py={1} bg={"gray.800"} color="gray.300" fontWeight={"400"}>
+            <Badge
+              px={2}
+              py={1}
+              bg={"gray.800"}
+              color="gray.300"
+              fontWeight={"400"}
+            >
               {account.gameWins + " games won"}
             </Badge>
           </Stack>
@@ -74,6 +86,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ account }) => {
                 rounded={"full"}
                 bg={"blue.400"}
                 color={"white"}
+                onClick={() => router.push("/account/initialize")}
               >
                 {account.playlistIDs.length == 0
                   ? "Load Playlists"

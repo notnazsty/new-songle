@@ -1,9 +1,8 @@
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, getDoc } from "firebase/firestore";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
 import { TransformedPlaylistData } from "../../models/spotify/playlists";
 import { Song } from "../../models/spotify/songs";
 import { playlistsRef, playlistsContRef } from "../firebase";
-
 
 export const saveUserSavedTracks = async (
   userID: string,
@@ -146,5 +145,33 @@ export const saveUserPlaylist = async (
         ...savedPlaylistDoc,
       });
     }
+  }
+};
+
+export const updatePlaylistPopularity = async (playlistID: string) => {
+  let id =
+    playlistID.includes("_st0") || playlistID.includes("_0")
+      ? playlistID
+      : playlistID + "_0";
+
+  const initDoc = await getDoc(doc(playlistsRef, id));
+
+  if (initDoc.exists()) {
+    let docData = initDoc.data() as PlaylistCollectionDoc;
+    console.log("ran")
+    const updatedDocData: PlaylistCollectionDoc = {
+      id: docData.id,
+      type: docData.type,
+      name: docData.name,
+      savedTracks: docData.savedTracks,
+      images: docData.images,
+      totalCount: docData.totalCount,
+      previousID: docData.previousID,
+      nextID: docData.nextID,
+      public: docData.public,
+      popularity: docData.popularity + 1,
+    };
+
+    await setDoc(doc(playlistsRef, docData.id), updatedDocData);
   }
 };

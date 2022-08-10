@@ -1,7 +1,7 @@
 import { Box, Spinner } from "@chakra-ui/react";
 import CasualGame from "components/Game/Casual/CasualGame";
 import Navbar from "components/Layout/Navbar";
-import { getDoc, doc } from "firebase/firestore";
+import { updatePlaylistPopularity } from "../../firebase/playlists/savePlaylists";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -12,6 +12,10 @@ import { getFSPlaylistDataFromID } from "../../firebase/playlists/getPlaylists";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
 import { Song } from "../../models/spotify/songs";
 import { shuffle } from "../../utils/game/methods";
+import { userRef } from "../../firebase/firebase";
+import { getDoc, doc } from "firebase/firestore";
+import { AccountCollectionDoc } from "models/firebase/account";
+import { useUser } from "components/AuthProvider";
 
 const PlaylistPage: NextPage = () => {
   const router = useRouter();
@@ -25,6 +29,16 @@ const PlaylistPage: NextPage = () => {
   const [gameMode, setGameMode] = useState<"Base" | "Standard" | "Casual">(
     "Base"
   );
+  const { user } = useUser();
+  const [userData, setUserData] = useState<AccountCollectionDoc | null>(null);
+
+  const loadUserData = useCallback(async () => {
+    if (user) {
+      getDoc(doc(userRef, user.uid)).then((data) => {
+        setUserData(data.data() as AccountCollectionDoc);
+      });
+    }
+  }, [user]);
 
   const loadPlaylist = useCallback(async () => {
     if (loading) {
@@ -46,16 +60,27 @@ const PlaylistPage: NextPage = () => {
   }, [loading, router.query.playlistID]);
 
   useEffect(() => {
+    loadUserData();
+  }, [loadUserData]);
+
+  useEffect(() => {
+    if (playlistData) {
+      updatePlaylistPopularity(playlistData.id);
+    }
+  }, [playlistData]);
+
+  useEffect(() => {
     loadPlaylist();
   }, [loadPlaylist]);
 
   const handleGameModes = () => {
     switch (gameMode) {
       case "Base":
-        return playlistData ? (
+        return playlistData && userData ? (
           <PlaylistOverview
             playlistData={playlistData}
             setGameMode={setGameMode}
+            userData={userData}
           />
         ) : (
           <> </>
@@ -96,7 +121,7 @@ const PlaylistPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {loading && <Spinner />}
+      {loading && !userData && <Spinner />}
 
       {handleGameModes()}
     </Box>
