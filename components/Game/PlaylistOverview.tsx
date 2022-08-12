@@ -62,7 +62,7 @@ const PlaylistOverview: React.FC<PlaylistOverviewProps> = ({
           )}
         </HStack>
 
-        {playlistData.images ? (
+        {playlistData.images && playlistData.images.length > 0 ? (
           <Image
             src={playlistData.images[0].url}
             alt={playlistData.name}

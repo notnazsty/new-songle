@@ -4,9 +4,7 @@ export interface AccountCollectionDoc {
   email: string | null;
   displayName: string;
   spotifyConnected: boolean;
-  gameWins: number;
-  gameLosses: number;
-  totalScore: number;
+  gamesPlayed: number;
   id: string;
   spotifyID: string | null;
   playlistIDs: string[];

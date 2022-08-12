@@ -1,4 +1,4 @@
-import { Box, Button, Spinner } from "@chakra-ui/react";
+import { Box, Button, Center, Spinner } from "@chakra-ui/react";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -22,8 +22,7 @@ import {
 } from "../../utils/spotify/playlistRequests";
 
 const AccountInit: NextPage = () => {
-  const { user } = useUser();
-  const [userData, setUserData] = useState<AccountCollectionDoc>();
+  const { user, userData } = useUser();
   const [loading, setLoading] = useState(true);
 
   const [uploadState, setUploadState] = useState<
@@ -48,9 +47,8 @@ const AccountInit: NextPage = () => {
   const loadPlaylistDataCallback = useCallback(async () => {
     if (
       loading &&
-      userData &&
-      userData.usersSpotifyTokenData &&
-      userData.usersSpotifyTokenData.accessToken
+      userData?.usersSpotifyTokenData?.accessToken &&
+      userData?.id
     ) {
       const userPlaylists = await getUserPlaylists(
         userData.usersSpotifyTokenData.accessToken
@@ -67,23 +65,17 @@ const AccountInit: NextPage = () => {
       }
       setLoading(false);
     }
-  }, [loading, userData]);
+  }, [loading, userData?.id, userData?.usersSpotifyTokenData?.accessToken]);
 
   useEffect(() => {
     loadPlaylistDataCallback();
   }, [loadPlaylistDataCallback]);
 
   useEffect(() => {
-    if (userData && userData.playlistIDs.length > 0) {
-      router.back()
+    if (userData?.playlistIDs && userData.playlistIDs.length > 0) {
+      router.back();
     }
-
-    if (!userData && user) {
-      getDoc(doc(userRef, user.uid)).then((data) => {
-        setUserData(data.data() as AccountCollectionDoc);
-      });
-    } 
-  }, [router, user, userData]);
+  }, [router, userData?.playlistIDs]);
 
   const uploadPlaylists = async () => {
     if (playlistsData && user && userData && savedTracksData) {
@@ -130,9 +122,7 @@ const AccountInit: NextPage = () => {
         email: userData.email,
         displayName: userData.displayName,
         spotifyConnected: userData.spotifyConnected,
-        gameWins: userData.gameWins,
-        gameLosses: userData.gameLosses,
-        totalScore: userData.totalScore,
+        gamesPlayed: userData.gamesPlayed,
         id: userData.id,
         spotifyID: userData.spotifyID,
         playlistIDs: uploadedPlaylistsIds,
@@ -187,7 +177,9 @@ const AccountInit: NextPage = () => {
       )}
 
       {uploadState == "Uploading" && (
-        <Spinner size="xl" color="green.300" thickness="4px" speed="0.55s" />
+        <Center w="100%" h="100%">
+          <Spinner size="xl" color="green.300" thickness="4px" speed="0.55s" />
+        </Center>
       )}
     </Box>
   );

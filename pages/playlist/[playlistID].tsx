@@ -12,9 +12,6 @@ import { getFSPlaylistDataFromID } from "../../firebase/playlists/getPlaylists";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
 import { Song } from "../../models/spotify/songs";
 import { shuffle } from "../../utils/game/methods";
-import { userRef } from "../../firebase/firebase";
-import { getDoc, doc } from "firebase/firestore";
-import { AccountCollectionDoc } from "models/firebase/account";
 import { useUser } from "components/AuthProvider";
 
 const PlaylistPage: NextPage = () => {
@@ -29,16 +26,7 @@ const PlaylistPage: NextPage = () => {
   const [gameMode, setGameMode] = useState<"Base" | "Standard" | "Casual">(
     "Base"
   );
-  const { user } = useUser();
-  const [userData, setUserData] = useState<AccountCollectionDoc | null>(null);
-
-  const loadUserData = useCallback(async () => {
-    if (user) {
-      getDoc(doc(userRef, user.uid)).then((data) => {
-        setUserData(data.data() as AccountCollectionDoc);
-      });
-    }
-  }, [user]);
+  const { userData } = useUser();
 
   const loadPlaylist = useCallback(async () => {
     if (loading) {
@@ -58,10 +46,6 @@ const PlaylistPage: NextPage = () => {
       }
     }
   }, [loading, router.query.playlistID]);
-
-  useEffect(() => {
-    loadUserData();
-  }, [loadUserData]);
 
   useEffect(() => {
     if (playlistData) {

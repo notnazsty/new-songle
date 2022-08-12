@@ -35,7 +35,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ account }) => {
         <Avatar
           size={"2xl"}
           src={
-            account.spotifyConnected && account.spotifyProfileData
+            account.spotifyConnected &&
+            account.spotifyProfileData &&
+            account.spotifyProfileData.images?.length > 0
               ? account.spotifyProfileData.images[0].url
               : ""
           }
@@ -55,17 +57,17 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ account }) => {
               color="gray.300"
               fontWeight={"400"}
             >
-              {account.gameWins + account.gameLosses + " games played"}
+              {account.gamesPlayed + " games played"}
             </Badge>
-            <Badge
+            {/* <Badge
               px={2}
               py={1}
               bg={"gray.800"}
               color="gray.300"
               fontWeight={"400"}
             >
-              {account.gameWins + " games won"}
-            </Badge>
+              {account.gamesPlayed + " games won"}
+            </Badge> */}
           </Stack>
 
           <Stack pt={3} direction={"row"} spacing={4}>

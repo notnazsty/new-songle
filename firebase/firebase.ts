@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { collection, getFirestore } from "firebase/firestore";
-import * as firebase from 'firebase/app'
+import * as firebase from "firebase/app";
 
 const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN;
@@ -38,5 +38,6 @@ export const db = getFirestore(app);
 export const userRef = collection(db, "users");
 export const playlistsRef = collection(db, "playlists");
 export const playlistsContRef = collection(db, "playlistsCont");
+export const leaderboardsRef = collection(db, "leaderboards");
 
 export const authProvider = new GoogleAuthProvider();

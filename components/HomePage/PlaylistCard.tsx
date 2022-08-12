@@ -23,7 +23,11 @@ const PlaylistCard = ({ playlist }: PlaylistCardProps): JSX.Element => {
         boxSize={48}
         pos="relative"
         overflow="hidden"
-        bgImage={playlist.images ? playlist.images[0].url : ""}
+        bgImage={
+          playlist.images && playlist.images.length > 0
+            ? playlist.images[0].url
+            : ""
+        }
         bgSize="contain"
         bgPos="center"
       />

@@ -11,9 +11,7 @@ export const followPlaylist = async (playlistID: string, userID: string) => {
     const newAccInfo: AccountCollectionDoc = {
       email: userData.email,
       spotifyConnected: userData.spotifyConnected,
-      gameWins: userData.gameWins,
-      gameLosses: userData.gameLosses,
-      totalScore: userData.totalScore,
+      gamesPlayed: userData.gamesPlayed,
       id: userData.id,
       spotifyID: userData.spotifyID,
       playlistIDs: [
@@ -38,9 +36,7 @@ export const unfollowPlaylist = async (playlistID: string, userID: string) => {
     const newAccInfo: AccountCollectionDoc = {
       email: userData.email,
       spotifyConnected: userData.spotifyConnected,
-      gameWins: userData.gameWins,
-      gameLosses: userData.gameLosses,
-      totalScore: userData.totalScore,
+      gamesPlayed: userData.gamesPlayed,
       id: userData.id,
       spotifyID: userData.spotifyID,
       playlistIDs: userData.playlistIDs.filter(
