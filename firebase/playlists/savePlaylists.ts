@@ -158,7 +158,6 @@ export const updatePlaylistPopularity = async (playlistID: string) => {
 
   if (initDoc.exists()) {
     let docData = initDoc.data() as PlaylistCollectionDoc;
-    console.log("ran")
     const updatedDocData: PlaylistCollectionDoc = {
       id: docData.id,
       type: docData.type,

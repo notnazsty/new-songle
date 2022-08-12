@@ -1,17 +1,7 @@
 import { CheckCircleIcon, CheckIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Text,
-  HStack,
-  Image,
-  Switch,
-  VStack,
-  Button,
-  Center,
-} from "@chakra-ui/react";
-import React, { Dispatch, SetStateAction } from "react";
+import { Text, HStack, Image, Switch, VStack, Center } from "@chakra-ui/react";
+import React from "react";
 import { TransformedPlaylistData } from "../../../models/spotify/playlists";
-import { SpotifyImageObject } from "../../../models/spotify/songs";
 
 interface PlaylistSelectCardProps {
   playlist: TransformedPlaylistData;
@@ -40,11 +30,13 @@ const PlaylistSelectCard: React.FC<PlaylistSelectCardProps> = ({
         <Text fontWeight={"bold"}>{playlist.name}</Text>
       </HStack>
       <Center pos="relative" boxSize="250px">
-        <Image
-          boxSize="250px"
-          src={playlist.images[0].url}
-          alt={playlist.name}
-        />
+        {playlist.images?.length > 0 && (
+          <Image
+            boxSize="250px"
+            src={playlist.images[0].url}
+            alt={playlist.name}
+          />
+        )}
         {!isSelected && (
           <Text
             pos="absolute"
@@ -53,8 +45,7 @@ const PlaylistSelectCard: React.FC<PlaylistSelectCardProps> = ({
             p={4}
             onClick={() => toggleSelectedState(playlist.id)}
           >
-            {" "}
-            Click to select for upload{" "}
+            Click to select for upload
           </Text>
         )}
         {isSelected && (
@@ -65,9 +56,8 @@ const PlaylistSelectCard: React.FC<PlaylistSelectCardProps> = ({
             p={4}
             onClick={() => toggleSelectedState(playlist.id)}
           >
-            {" "}
-            <CheckCircleIcon boxSize={16} color="green.500" />{" "}
-            <Text>Will upload</Text>{" "}
+            <CheckCircleIcon boxSize={16} color="green.500" />
+            <Text>Will upload</Text>
           </VStack>
         )}
         {isSelected && (
@@ -85,27 +75,13 @@ const PlaylistSelectCard: React.FC<PlaylistSelectCardProps> = ({
             <Switch
               isChecked={isPublic}
               onChange={() => togglePublicState(playlist.id)}
-            />{" "}
+            />
             <Text fontSize={"sm"} color={isPublic ? "blue.300" : "gray.300"}>
               public
             </Text>
           </HStack>
         )}
       </Center>
-
-      {/* <HStack justifyContent={"center"}>
-        {isSelected && (
-          <VStack>
-            <Button
-              colorScheme={"blue"}
-              size="lg"
-              onClick={() => togglePublicState(playlist.id)}
-            >
-              <Text> {isPublic ? "Public" : "Private"} </Text>
-            </Button>
-          </VStack>
-        )}
-      </HStack> */}
     </VStack>
   );
 };

@@ -124,11 +124,13 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
             <Text fontSize={"4xl"} fontWeight="bold">
               You Won!!
             </Text>
-            <Image
-              src={correctSong.coverImages[0].url}
-              alt={correctSong.name}
-              boxSize="sm"
-            />
+            {correctSong.coverImages.length > 0 && (
+              <Image
+                src={correctSong.coverImages[0].url}
+                alt={correctSong.name}
+                boxSize="sm"
+              />
+            )}
             <Text> {correctSong.name} </Text>
 
             <HStack w="100%" justifyContent={"center"}>
@@ -146,11 +148,13 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
             <Text fontSize={"4xl"} fontWeight="bold">
               Correct Song
             </Text>
-            <Image
-              src={correctSong.coverImages[0].url}
-              alt={correctSong.name}
-              boxSize="sm"
-            />
+            {correctSong.coverImages.length > 0 && (
+              <Image
+                src={correctSong.coverImages[0].url}
+                alt={correctSong.name}
+                boxSize="sm"
+              />
+            )}
             <Text> {correctSong.name} </Text>
 
             <HStack w="100%" justifyContent={"center"}>

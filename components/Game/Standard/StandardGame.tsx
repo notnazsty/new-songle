@@ -251,22 +251,22 @@ const StandardGame: React.FC<StandardGameProps> = ({
           ) : (
             <VStack w="100%" justifyContent={"center"} spacing={8}>
               <Heading color="red" mt={4}>
-                {" "}
-                Loss{" "}
+                Loss
               </Heading>
 
               <Text fontSize={"2xl"}> Score: {score} </Text>
 
               <VStack>
                 <Text fontSize={"2xl"} fontWeight="bold">
-                  {" "}
-                  Correct Song{" "}
+                  Correct Song
                 </Text>
-                <Image
-                  src={correctSong.coverImages[0].url}
-                  alt={correctSong.name}
-                  boxSize="sm"
-                />
+                {correctSong.coverImages.length > 0 && (
+                  <Image
+                    src={correctSong.coverImages[0].url}
+                    alt={correctSong.name}
+                    boxSize="sm"
+                  />
+                )}
                 <Text> {correctSong.name} </Text>
               </VStack>
               <HStack w="100%" justifyContent={"center"}>

@@ -17,9 +17,7 @@ export const signin = async () => {
     const newAccInfo: AccountCollectionDoc = {
       email: user.email,
       spotifyConnected: false,
-      gameWins: 0,
-      gameLosses: 0,
-      totalScore: 0,
+      gamesPlayed: 0,
       id: user.uid,
       spotifyID: null,
       playlistIDs: [],

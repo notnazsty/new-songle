@@ -15,7 +15,7 @@ export interface SpotifyProfileData {
   };
   href: string;
   id: string;
-  images: SpotifyImageObject[];
+  images: SpotifyImageObject[] ;
   product: string;
   type: "user";
   uri: string;

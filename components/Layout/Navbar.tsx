@@ -62,7 +62,8 @@ const Navbar: React.FC<Props> = ({ maxWidth = "6xl" }) => {
                   src={
                     userData &&
                     userData.spotifyConnected &&
-                    userData.spotifyProfileData
+                    userData.spotifyProfileData &&
+                    userData.spotifyProfileData.images?.length > 0
                       ? userData.spotifyProfileData.images[0].url
                       : ""
                   }
@@ -71,8 +72,7 @@ const Navbar: React.FC<Props> = ({ maxWidth = "6xl" }) => {
               <Center pt={3} pb={2}>
                 {user && (
                   <Text fontSize={"lg"} fontWeight="medium">
-                    {" "}
-                    {user.displayName ? user.displayName : "User"}{" "}
+                    {user.displayName ? user.displayName : "User"}
                   </Text>
                 )}
               </Center>
