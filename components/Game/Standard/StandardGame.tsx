@@ -9,6 +9,7 @@ import {
   Image,
   Stack,
 } from "@chakra-ui/react";
+import { addToGamesPlayed } from "firebase/account/gamesPlayed";
 import React, {
   Dispatch,
   SetStateAction,
@@ -26,18 +27,19 @@ interface StandardGameProps {
   songList: Song[];
   setGameMode: Dispatch<SetStateAction<"Base" | "Standard" | "Casual">>;
   updateLeaderboard: (score: number, numCorrect: number) => Promise<void>;
+  incrementGamesPlayed: () => Promise<void>;
 }
 const StandardGame: React.FC<StandardGameProps> = ({
   songList,
   setGameMode,
   updateLeaderboard,
+  incrementGamesPlayed,
 }) => {
   const [lyrics, setLyrics] = useState<string[] | null>(null);
   const [correctSong, setCorrectSong] = useState<Song | null>(null);
   const [options, setOptions] = useState<Song[] | null>(null);
   const [songListStack, setSongListStack] = useState<Song[]>(shuffle(songList));
   const [loaded, setLoaded] = useState(false);
-
   const [gameState, setGameState] = useState<"In Progress" | "Loss" | "Win">(
     "In Progress"
   );
@@ -135,8 +137,9 @@ const StandardGame: React.FC<StandardGameProps> = ({
       });
 
       setLoaded(true);
+      incrementGamesPlayed();
     }
-  }, [correctSong, loaded, songListStack]);
+  }, [correctSong, incrementGamesPlayed, loaded, songListStack]);
 
   const updateCounts = () => {
     setNumberCorrect(numberCorrect + 1);
@@ -178,6 +181,7 @@ const StandardGame: React.FC<StandardGameProps> = ({
   };
 
   const startNewGame = () => {
+    incrementGamesPlayed();
     setSongListStack(shuffle(songList));
     setWrongAnswers(0);
     setGameState("In Progress");

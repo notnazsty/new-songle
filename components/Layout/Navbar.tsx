@@ -55,7 +55,7 @@ const Navbar: React.FC<Props> = ({ maxWidth = "6xl" }) => {
             <MenuButton>
               <HamburgerIcon boxSize={8} />
             </MenuButton>
-            <MenuList bg="gray.900" borderColor={"gray.700"}>
+            <MenuList bg="gray.900" borderColor={"gray.700"} pos='relative' zIndex={10000}>
               <Center pt={4}>
                 <Avatar
                   size={"xl"}

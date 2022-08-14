@@ -22,6 +22,7 @@ import {
   LeaderboardScores,
 } from "models/firebase/leaderboard";
 import { signin } from "../../firebase/signIn";
+import { addToGamesPlayed } from "../../firebase/account/gamesPlayed";
 
 const PlaylistPage: NextPage = () => {
   const router = useRouter();
@@ -41,6 +42,12 @@ const PlaylistPage: NextPage = () => {
   );
 
   const { userData } = useUser();
+
+  const incrementGamesPlayed = async () => {
+    if (userData) {
+      await addToGamesPlayed(userData.id);
+    }
+  };
 
   const loadPlaylist = useCallback(async () => {
     if (loading) {
@@ -116,6 +123,7 @@ const PlaylistPage: NextPage = () => {
             songList={playlistData.savedTracks}
             setGameMode={setGameMode}
             updateLeaderboard={updateLeaderboard}
+            incrementGamesPlayed={incrementGamesPlayed}
           />
         ) : (
           <></>
@@ -125,6 +133,7 @@ const PlaylistPage: NextPage = () => {
           <CasualGame
             songList={playlistData.savedTracks}
             setGameMode={setGameMode}
+            incrementGamesPlayed={incrementGamesPlayed}
           />
         ) : (
           <></>
@@ -148,7 +157,7 @@ const PlaylistPage: NextPage = () => {
       </Head>
 
       {playlistData && leaderboard && !userData && (
-        <Stack w="100%" justifyContent={"center"} alignItems="center" h='100%'>
+        <Stack w="100%" justifyContent={"center"} alignItems="center" h="100%">
           <VStack maxW="md" w="100%" p={4}>
             <Text fontSize="2xl"> Please login to play Songle.</Text>
             <Button

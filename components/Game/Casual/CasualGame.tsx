@@ -20,9 +20,14 @@ import GameInfo from "./GameInfo";
 interface CasualGameProps {
   songList: Song[];
   setGameMode: Dispatch<SetStateAction<"Base" | "Standard" | "Casual">>;
+  incrementGamesPlayed: () => Promise<void>;
 }
 
-const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
+const CasualGame: React.FC<CasualGameProps> = ({
+  songList,
+  setGameMode,
+  incrementGamesPlayed,
+}) => {
   const [innerSongList, setInnerSongList] = useState(songList);
   const [loading, setLoading] = useState(true);
   const [correctSong, setCorrectSong] = useState<Song | null>(null);
@@ -34,7 +39,7 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
   );
   const [isLyricLoaded, setIsLyricLoaded] = useState(false);
 
-  // TODO Filter Song Options with Guesses
+  // TODO Better Hints
 
   useEffect(() => {
     if (loading) {
@@ -42,8 +47,9 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
         innerSongList[Math.floor(Math.random() * innerSongList.length)]
       );
       setLoading(false);
+      incrementGamesPlayed();
     }
-  }, [innerSongList, loading]);
+  }, [incrementGamesPlayed, innerSongList, loading]);
 
   const handleGuess = (guess: Song) => {
     if (correctSong) {
@@ -72,6 +78,7 @@ const CasualGame: React.FC<CasualGameProps> = ({ songList, setGameMode }) => {
   };
 
   const startNewGame = () => {
+    incrementGamesPlayed();
     setGameState("Playing");
     setInnerSongList(songList);
     setIsLyricLoaded(false);

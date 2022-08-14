@@ -61,7 +61,6 @@ export const addNewScoreToLeaderboard = async (
       gamesPlayed: leaderboard.gamesPlayed + 1,
     });
   } else {
-    // Handle updating scores for the same player
 
     let containsPlayer = false;
     let playerScore: LeaderboardScores | null = null;

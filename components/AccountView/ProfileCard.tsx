@@ -114,7 +114,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ account }) => {
               >
                 {account.playlistIDs.length == 0
                   ? "Load Playlists"
-                  : "Reload Playlists"}
+                  : "Coming Soon"}
               </Button>
             )}
           </Stack>
