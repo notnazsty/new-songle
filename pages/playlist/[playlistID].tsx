@@ -51,13 +51,12 @@ const PlaylistPage: NextPage = () => {
         if (data) {
           setPlaylistData(data);
           setSongList(shuffle(data.savedTracks));
+
+          const board = await loadLeaderboard(playlistID, data.name);
+          setLeaderboard(board);
         }
 
         setLoading(false);
-
-        // Load and create Leaderboard here
-        const board = await loadLeaderboard(playlistID);
-        setLeaderboard(board);
       }
     }
   }, [loading, router.query.playlistID]);
@@ -75,7 +74,7 @@ const PlaylistPage: NextPage = () => {
   const updateLeaderboard = async (score: number, numCorrect: number) => {
     if (playlistData && userData && leaderboard) {
       const newScoreData: LeaderboardScores = {
-        id: playlistData.id,
+        id: userData.id,
         name: userData.displayName,
         score: score,
         numCorrect: numCorrect,
@@ -86,7 +85,8 @@ const PlaylistPage: NextPage = () => {
       await addNewScoreToLeaderboard(
         leaderboard,
         newScoreData,
-        playlistData.id
+        playlistData.id,
+        playlistData.name
       );
     }
   };

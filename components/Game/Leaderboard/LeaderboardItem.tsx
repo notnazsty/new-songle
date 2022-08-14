@@ -30,7 +30,7 @@ const LeaderboardItem: React.FC<LeaderboardItemProps> = ({
         />
         <Text fontSize="2xl"> {score.name} </Text>
       </HStack>
-      <HStack px={4} >
+      <HStack px={{base: 4, md: 8 }} >
         <Text color='white' fontSize={'4xl'}> {score.score} </Text>
       </HStack>
     </HStack>

@@ -161,6 +161,7 @@ const StandardGame: React.FC<StandardGameProps> = ({
       updateCounts();
 
       if (songListStack.length == 0) {
+        updateLeaderboard(score, numberCorrect);
         setGameState("Win");
       } else {
         loadNextRound();
@@ -170,6 +171,7 @@ const StandardGame: React.FC<StandardGameProps> = ({
         setWrongAnswers(wrongAnswers + 1);
       } else {
         setWrongAnswers(wrongAnswers + 1);
+        updateLeaderboard(score, numberCorrect);
         setGameState("Loss");
       }
     }
