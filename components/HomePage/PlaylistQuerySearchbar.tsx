@@ -2,7 +2,7 @@ import { Search2Icon } from "@chakra-ui/icons";
 import { HStack, InputGroup, InputLeftElement, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const PlaylistQuerySearchbar = () => {
+const PlaylistQuerySearchbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

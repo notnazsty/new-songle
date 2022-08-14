@@ -17,8 +17,6 @@ import { Song } from "../../models/spotify/songs";
     return (
       <HStack
         w="100%"
-        // border="1px"
-        // borderColor={"gray.500"}
         rounded="md"
         overflow={"hidden"}
         cursor="pointer"

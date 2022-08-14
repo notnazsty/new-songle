@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Avatar,
   Box,
@@ -12,11 +12,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useUser } from "../AuthProvider";
-import { auth, userRef } from "../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { signin } from "../../firebase/signIn";
-import { getDoc, doc } from "firebase/firestore";
-import { AccountCollectionDoc } from "../../models/firebase/account";
+
 import { useRouter } from "next/router";
 
 interface Props {
@@ -55,7 +54,12 @@ const Navbar: React.FC<Props> = ({ maxWidth = "6xl" }) => {
             <MenuButton>
               <HamburgerIcon boxSize={8} />
             </MenuButton>
-            <MenuList bg="gray.900" borderColor={"gray.700"} pos='relative' zIndex={10000}>
+            <MenuList
+              bg="gray.900"
+              borderColor={"gray.700"}
+              pos="relative"
+              zIndex={10000}
+            >
               <Center pt={4}>
                 <Avatar
                   size={"xl"}

@@ -7,7 +7,7 @@ interface PlaylistCardProps {
   playlist: PlaylistCollectionDoc;
 }
 
-const PlaylistCard = ({ playlist }: PlaylistCardProps): JSX.Element => {
+const PlaylistCard: React.FC<PlaylistCardProps> = ({ playlist }: PlaylistCardProps) => {
   const router = useRouter();
 
   return (

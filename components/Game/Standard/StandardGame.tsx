@@ -9,7 +9,6 @@ import {
   Image,
   Stack,
 } from "@chakra-ui/react";
-import { addToGamesPlayed } from "firebase/account/gamesPlayed";
 import React, {
   Dispatch,
   SetStateAction,

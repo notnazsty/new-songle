@@ -8,9 +8,6 @@ import {
   Stack,
   Icon,
 } from "@chakra-ui/react";
-import { userRef } from "../firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { AccountCollectionDoc } from "models/firebase/account";
 import { PlaylistCollectionDoc } from "models/firebase/playlists";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -26,7 +23,7 @@ import Navbar from "components/Layout/Navbar";
 import PlaylistCarousel from "components/HomePage/PlaylistCarousel";
 
 const Home: NextPage = () => {
-  const { user } = useUser();
+  const { user, userLoading, userData } = useUser();
   const [loading, setLoading] = useState(true);
   const [playlists, setPlaylists] = useState<PlaylistCollectionDoc[] | null>(
     null
@@ -36,7 +33,7 @@ const Home: NextPage = () => {
   >(null);
 
   const loadPlaylists = useCallback(async () => {
-    if (loading && user) {
+    if (loading && user && userData) {
       setLoading(false);
 
       let docs = await getPlaylistsWithWhereQuery("public", "==", true);
@@ -49,23 +46,18 @@ const Home: NextPage = () => {
       }
       setPlaylists(playlistArr);
 
-      const userData = await getDoc(doc(userRef, user.uid));
-      if (userData.exists()) {
-        const playlistIDs: string[] = await (
-          userData.data() as AccountCollectionDoc
-        ).playlistIDs;
-        let playlistsArr: PlaylistCollectionDoc[] = [];
-        for (let i = 0; i < playlistIDs.length; i++) {
-          const playlist: PlaylistCollectionDoc | void =
-            await getFSPlaylistDataFromID(playlistIDs[i]);
-          if (playlist) {
-            playlistsArr.push(playlist);
-          }
+      const playlistIDs: string[] = await userData.playlistIDs;
+      let playlistsArr: PlaylistCollectionDoc[] = [];
+      for (let i = 0; i < playlistIDs.length; i++) {
+        const playlist: PlaylistCollectionDoc | void =
+          await getFSPlaylistDataFromID(playlistIDs[i]);
+        if (playlist) {
+          playlistsArr.push(playlist);
         }
-        setPersonalPlaylists(playlistsArr);
       }
+      setPersonalPlaylists(playlistsArr);
     }
-  }, [loading, user]);
+  }, [loading, user, userData]);
 
   useEffect(() => {
     loadPlaylists();
@@ -96,7 +88,7 @@ const Home: NextPage = () => {
         <Text pt={8}> This website is still under development.</Text>
       </VStack>
 
-      {!user && (
+      {!user && !userLoading && (
         <Stack
           direction={{ base: "column", lg: "row" }}
           w="100%"

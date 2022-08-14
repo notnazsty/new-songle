@@ -1,4 +1,4 @@
-import { Center, HStack, Text, VStack } from "@chakra-ui/react";
+import { Center, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
 interface TimerProps {
@@ -18,16 +18,25 @@ const Timer: React.FC<TimerProps> = ({ timeLeft }) => {
     if (currentSeconds < 5) {
       setColor("red");
     } else {
-      setColor("green.500")
+      setColor("green.500");
     }
- 
+
     setSeconds(currentSeconds);
-    setDs(currentDs)
+    setDs(currentDs);
   }, [timeLeft]);
 
   return (
-    <Center w="100%" borderColor={color} borderWidth="1px" boxSize="100px" rounded={"full"} >
-      <Text color={color} fontSize={"3xl"}> {`${seconds}.${ds}`} </Text>
+    <Center
+      w="100%"
+      borderColor={color}
+      borderWidth="1px"
+      boxSize="100px"
+      rounded={"full"}
+    >
+      <Text color={color} fontSize={"3xl"}>
+        {" "}
+        {`${seconds}.${ds}`}{" "}
+      </Text>
     </Center>
   );
 };
