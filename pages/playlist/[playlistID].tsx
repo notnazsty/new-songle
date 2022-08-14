@@ -21,6 +21,9 @@ import {
   LeaderboardCollection,
   LeaderboardScores,
 } from "models/firebase/leaderboard";
+import { leaderboardsRef } from "firebase/firebase";
+import { onSnapshot, doc } from "firebase/firestore";
+import { AccountCollectionDoc } from "models/firebase/account";
 
 const PlaylistPage: NextPage = () => {
   const router = useRouter();
@@ -51,9 +54,6 @@ const PlaylistPage: NextPage = () => {
         if (data) {
           setPlaylistData(data);
           setSongList(shuffle(data.savedTracks));
-
-          const board = await loadLeaderboard(playlistID, data.name);
-          setLeaderboard(board);
         }
 
         setLoading(false);
@@ -62,8 +62,16 @@ const PlaylistPage: NextPage = () => {
   }, [loading, router.query.playlistID]);
 
   useEffect(() => {
-    if (playlistData) {
+    if (playlistData ) {
       updatePlaylistPopularity(playlistData.id);
+
+      const unsub = loadLeaderboard(
+        playlistData.id,
+        playlistData.name,
+        setLeaderboard
+      );
+
+      return unsub;
     }
   }, [playlistData]);
 

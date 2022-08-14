@@ -1,22 +1,32 @@
+import { SetStateAction } from "react";
 import { leaderboardsRef } from "../firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  onSnapshot,
+  setDoc,
+  Unsubscribe,
+} from "firebase/firestore";
 import {
   LeaderboardCollection,
   LeaderboardScores,
 } from "models/firebase/leaderboard";
 
-export const loadLeaderboard = async (
+export const loadLeaderboard = (
   playlistID: string,
-  playlistName: string
-): Promise<LeaderboardCollection> => {
-  const currentLeaderboardDoc = await getDoc(doc(leaderboardsRef, playlistID));
+  playlistName: string,
+  setLeaderboard: (value: SetStateAction<LeaderboardCollection | null>) => void
+): Unsubscribe => {
+  const unsub = onSnapshot(doc(leaderboardsRef, playlistID), (doc) => {
+    if (doc.exists()) {
+      const data = doc.data() as LeaderboardCollection;
+      setLeaderboard(data);
+    } else {
+      createLeaderboard(playlistID, playlistName);
+    }
+  });
 
-  if (currentLeaderboardDoc.exists()) {
-    return currentLeaderboardDoc.data() as LeaderboardCollection;
-  } else {
-    const newLeaderboard = await createLeaderboard(playlistID, playlistName);
-    return newLeaderboard;
-  }
+  return unsub;
 };
 
 export const createLeaderboard = async (
