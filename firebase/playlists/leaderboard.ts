@@ -46,6 +46,9 @@ export const addNewScoreToLeaderboard = async (
       gamesPlayed: leaderboard.gamesPlayed + 1,
     });
   } else {
+
+    // Handle updating scores for the same player
+
     await setDoc(doc(leaderboardsRef, playlistID), {
       playlistID: playlistID,
       top: [...leaderboard.top, newScoreData].sort(

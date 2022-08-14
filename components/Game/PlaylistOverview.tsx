@@ -6,6 +6,11 @@ import {
   Image,
   Grid,
   Badge,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
 } from "@chakra-ui/react";
 import {
   followPlaylist,
@@ -15,16 +20,20 @@ import { AccountCollectionDoc } from "models/firebase/account";
 import React, { Dispatch, SetStateAction } from "react";
 import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
 import SongGrid from "./SongGrid";
+import Leaderboard from "./Leaderboard/Leaderboard";
+import { LeaderboardCollection } from "models/firebase/leaderboard";
 
 interface PlaylistOverviewProps {
   playlistData: PlaylistCollectionDoc;
   setGameMode: Dispatch<SetStateAction<"Base" | "Standard" | "Casual">>;
   userData: AccountCollectionDoc;
+  leaderboard: LeaderboardCollection;
 }
 const PlaylistOverview: React.FC<PlaylistOverviewProps> = ({
   playlistData,
   setGameMode,
   userData,
+  leaderboard,
 }) => {
   return (
     <Grid w="100%" templateColumns={{ lg: "500px auto" }}>
@@ -73,9 +82,28 @@ const PlaylistOverview: React.FC<PlaylistOverviewProps> = ({
         )}
       </VStack>
 
-      <VStack align="start" spacing={6} p={4}>
-        <SongGrid savedTracks={playlistData.savedTracks} />
-      </VStack>
+      <Tabs
+        variant="solid-rounded"
+        colorScheme="green"
+        my={{ base: 24, md: 2 }}
+      >
+        <TabList>
+          <Tab> Playlist </Tab>
+          <Tab> Leaderboard </Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <VStack align="start">
+              <SongGrid savedTracks={playlistData.savedTracks} />
+            </VStack>
+          </TabPanel>
+          <TabPanel>
+            <VStack align="start">
+              <Leaderboard board={leaderboard} />
+            </VStack>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
 
       <HStack pos="fixed" bottom={6} left={6}>
         <Button

@@ -12,5 +12,5 @@ export interface LeaderboardScores {
   name: string;
   score: number;
   numCorrect: number;
-  profile: SpotifyImageObject[];
+  image: SpotifyImageObject | null;
 }
