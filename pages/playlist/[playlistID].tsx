@@ -13,6 +13,17 @@ import { PlaylistCollectionDoc } from "../../models/firebase/playlists";
 import { Song } from "../../models/spotify/songs";
 import { shuffle } from "../../utils/game/methods";
 import { useUser } from "components/AuthProvider";
+import {
+  addNewScoreToLeaderboard,
+  loadLeaderboard,
+} from "../../firebase/playlists/leaderboard";
+import {
+  LeaderboardCollection,
+  LeaderboardScores,
+} from "models/firebase/leaderboard";
+import { leaderboardsRef } from "firebase/firebase";
+import { onSnapshot, doc } from "firebase/firestore";
+import { AccountCollectionDoc } from "models/firebase/account";
 
 const PlaylistPage: NextPage = () => {
   const router = useRouter();
@@ -26,6 +37,11 @@ const PlaylistPage: NextPage = () => {
   const [gameMode, setGameMode] = useState<"Base" | "Standard" | "Casual">(
     "Base"
   );
+
+  const [leaderboard, setLeaderboard] = useState<LeaderboardCollection | null>(
+    null
+  );
+
   const { userData } = useUser();
 
   const loadPlaylist = useCallback(async () => {
@@ -41,15 +57,21 @@ const PlaylistPage: NextPage = () => {
         }
 
         setLoading(false);
-
-        // Load and update playlist leaderboard data etc player high score too
       }
     }
   }, [loading, router.query.playlistID]);
 
   useEffect(() => {
-    if (playlistData) {
+    if (playlistData ) {
       updatePlaylistPopularity(playlistData.id);
+
+      const unsub = loadLeaderboard(
+        playlistData.id,
+        playlistData.name,
+        setLeaderboard
+      );
+
+      return unsub;
     }
   }, [playlistData]);
 
@@ -57,14 +79,35 @@ const PlaylistPage: NextPage = () => {
     loadPlaylist();
   }, [loadPlaylist]);
 
+  const updateLeaderboard = async (score: number, numCorrect: number) => {
+    if (playlistData && userData && leaderboard) {
+      const newScoreData: LeaderboardScores = {
+        id: userData.id,
+        name: userData.displayName,
+        score: score,
+        numCorrect: numCorrect,
+        image: userData.spotifyProfileData?.images[0]
+          ? userData.spotifyProfileData.images[0]
+          : null,
+      };
+      await addNewScoreToLeaderboard(
+        leaderboard,
+        newScoreData,
+        playlistData.id,
+        playlistData.name
+      );
+    }
+  };
+
   const handleGameModes = () => {
     switch (gameMode) {
       case "Base":
-        return playlistData && userData ? (
+        return playlistData && userData && leaderboard ? (
           <PlaylistOverview
             playlistData={playlistData}
             setGameMode={setGameMode}
             userData={userData}
+            leaderboard={leaderboard}
           />
         ) : (
           <> </>
@@ -74,6 +117,7 @@ const PlaylistPage: NextPage = () => {
           <StandardGame
             songList={playlistData.savedTracks}
             setGameMode={setGameMode}
+            updateLeaderboard={updateLeaderboard}
           />
         ) : (
           <></>
@@ -105,7 +149,7 @@ const PlaylistPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {loading && !userData && <Spinner />}
+      {loading && !userData && !leaderboard && <Spinner />}
 
       {handleGameModes()}
     </Box>

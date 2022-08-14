@@ -2,6 +2,7 @@ import { SpotifyImageObject } from "models/spotify/songs";
 
 export interface LeaderboardCollection {
   playlistID: string;
+  playlistName: string;
   top: LeaderboardScores[];
   lastUpdated: Date;
   gamesPlayed: number;
@@ -12,5 +13,5 @@ export interface LeaderboardScores {
   name: string;
   score: number;
   numCorrect: number;
-  profile: SpotifyImageObject[];
+  image: SpotifyImageObject | null;
 }

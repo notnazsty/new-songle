@@ -25,11 +25,12 @@ import Timer from "./Timer";
 interface StandardGameProps {
   songList: Song[];
   setGameMode: Dispatch<SetStateAction<"Base" | "Standard" | "Casual">>;
+  updateLeaderboard: (score: number, numCorrect: number) => Promise<void>;
 }
-
 const StandardGame: React.FC<StandardGameProps> = ({
   songList,
   setGameMode,
+  updateLeaderboard,
 }) => {
   const [lyrics, setLyrics] = useState<string[] | null>(null);
   const [correctSong, setCorrectSong] = useState<Song | null>(null);
@@ -42,7 +43,6 @@ const StandardGame: React.FC<StandardGameProps> = ({
   );
 
   const [isLyricLoaded, setIsLyricLoaded] = useState(false);
-
   const [wrongAnswers, setWrongAnswers] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [maxTime, setMaxTime] = useState<number>(15 * 1000); // 15 Seconds
@@ -161,6 +161,7 @@ const StandardGame: React.FC<StandardGameProps> = ({
       updateCounts();
 
       if (songListStack.length == 0) {
+        updateLeaderboard(score, numberCorrect);
         setGameState("Win");
       } else {
         loadNextRound();
@@ -170,6 +171,7 @@ const StandardGame: React.FC<StandardGameProps> = ({
         setWrongAnswers(wrongAnswers + 1);
       } else {
         setWrongAnswers(wrongAnswers + 1);
+        updateLeaderboard(score, numberCorrect);
         setGameState("Loss");
       }
     }

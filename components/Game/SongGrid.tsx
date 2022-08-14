@@ -9,9 +9,8 @@ interface SongGridProps {
 }
 
 const SongGrid: React.FC<SongGridProps> = ({ savedTracks }) => {
+  
   const [songList, setSongList] = useState<Song[]>([]);
-
-  // TODO Use Styled Components To Style This
 
   return (
     <VStack w="100%" justifyContent={"left"}>
