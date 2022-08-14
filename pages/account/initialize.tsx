@@ -1,4 +1,5 @@
 import { Box, Button, Center, Spinner } from "@chakra-ui/react";
+import { useError } from "components/ErrorProvider";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -22,6 +23,7 @@ import {
 } from "../../utils/spotify/playlistRequests";
 
 const AccountInit: NextPage = () => {
+  const { onOpen, setErrorStatus, setMessage } = useError();
   const { user, userData } = useUser();
   const [loading, setLoading] = useState(true);
 
@@ -55,6 +57,12 @@ const AccountInit: NextPage = () => {
       );
       if (!("status" in userPlaylists)) {
         setPlaylistsData(userPlaylists);
+      } else {
+        setErrorStatus(userPlaylists.status);
+        setMessage(userPlaylists.message);
+        onOpen();
+        setLoading(false);
+        return;
       }
       const savedTracks = await getUserSavedTracksData(
         userData.usersSpotifyTokenData.accessToken,
@@ -62,10 +70,23 @@ const AccountInit: NextPage = () => {
       );
       if (!("status" in savedTracks)) {
         setSavedTracksData(savedTracks);
+      } else {
+        setErrorStatus(savedTracks.status);
+        setMessage(savedTracks.message);
+        onOpen();
+        setLoading(false);
+        return;
       }
       setLoading(false);
     }
-  }, [loading, userData?.id, userData?.usersSpotifyTokenData?.accessToken]);
+  }, [
+    loading,
+    userData?.id,
+    userData?.usersSpotifyTokenData?.accessToken,
+    onOpen,
+    setErrorStatus,
+    setMessage,
+  ]);
 
   useEffect(() => {
     loadPlaylistDataCallback();

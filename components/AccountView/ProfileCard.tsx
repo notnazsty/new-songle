@@ -1,3 +1,4 @@
+import { RepeatIcon } from "@chakra-ui/icons";
 import {
   Center,
   Avatar,
@@ -8,10 +9,15 @@ import {
   BoxProps,
   VStack,
 } from "@chakra-ui/react";
+import { useUser } from "components/AuthProvider";
 import { useRouter } from "next/router";
 import React from "react";
+import { getSpotifyData } from "utils/spotify/accountRequests";
 import { AccountCollectionDoc } from "../../models/firebase/account";
 import { loginURL } from "../../utils/spotify/auth";
+import { userRef } from "../../firebase/firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import { useError } from "components/ErrorProvider";
 
 interface ProfileCardProps extends BoxProps {
   account: AccountCollectionDoc;
@@ -19,6 +25,26 @@ interface ProfileCardProps extends BoxProps {
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ account }) => {
   const router = useRouter();
+  const { user, userData } = useUser();
+  const { onOpen, setErrorStatus, setMessage } = useError();
+
+  const updateProfileData = async () => {
+    if (user && userData?.usersSpotifyTokenData?.accessToken) {
+      const profileData = await getSpotifyData(
+        userData.usersSpotifyTokenData.accessToken
+      );
+
+      if (!("status" in profileData)) {
+        await updateDoc(doc(userRef, user.uid), {
+          spotifyProfileData: profileData,
+        });
+      } else {
+        setErrorStatus(profileData.status);
+        setMessage(profileData.message);
+        onOpen();
+      }
+    }
+  };
 
   return (
     <Center py={6}>
@@ -47,7 +73,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ account }) => {
 
         <VStack w="100%" align={"left"} justify="center">
           <Heading size={"lg"} fontFamily={"body"} textAlign="start">
-            {account.displayName}
+            {account.displayName}{" "}
+            <RepeatIcon
+              boxSize={4}
+              cursor="pointer"
+              onClick={async () => await updateProfileData()}
+            />
           </Heading>
           <Stack align={"center"} justify={"center"} direction={"row"} pt={1}>
             <Badge
@@ -59,15 +90,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ account }) => {
             >
               {account.gamesPlayed + " games played"}
             </Badge>
-            {/* <Badge
-              px={2}
-              py={1}
-              bg={"gray.800"}
-              color="gray.300"
-              fontWeight={"400"}
-            >
-              {account.gamesPlayed + " games won"}
-            </Badge> */}
           </Stack>
 
           <Stack pt={3} direction={"row"} spacing={4}>
