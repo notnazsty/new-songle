@@ -16,7 +16,7 @@ import { getSpotifyData } from "../utils/spotify/accountRequests";
 
 const Callback: NextPage = () => {
   const [userCode, setUserCode] = useState<string | null>(null);
-  const { user, loading } = useUser();
+  const { user, userLoading: loading } = useUser();
 
   const router = useRouter();
   const { onOpen, setErrorStatus, setMessage } = useError();

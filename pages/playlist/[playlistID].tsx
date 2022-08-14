@@ -1,4 +1,4 @@
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Text, Button, Spinner, Stack, VStack } from "@chakra-ui/react";
 import CasualGame from "components/Game/Casual/CasualGame";
 import Navbar from "components/Layout/Navbar";
 import { updatePlaylistPopularity } from "../../firebase/playlists/savePlaylists";
@@ -21,9 +21,7 @@ import {
   LeaderboardCollection,
   LeaderboardScores,
 } from "models/firebase/leaderboard";
-import { leaderboardsRef } from "firebase/firebase";
-import { onSnapshot, doc } from "firebase/firestore";
-import { AccountCollectionDoc } from "models/firebase/account";
+import { signin } from "../../firebase/signIn";
 
 const PlaylistPage: NextPage = () => {
   const router = useRouter();
@@ -62,7 +60,7 @@ const PlaylistPage: NextPage = () => {
   }, [loading, router.query.playlistID]);
 
   useEffect(() => {
-    if (playlistData ) {
+    if (playlistData) {
       updatePlaylistPopularity(playlistData.id);
 
       const unsub = loadLeaderboard(
@@ -148,6 +146,32 @@ const PlaylistPage: NextPage = () => {
         <meta name="description" content="Songle" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      {playlistData && leaderboard && !userData && (
+        <Stack w="100%" justifyContent={"center"} alignItems="center" h='100%'>
+          <VStack maxW="md" w="100%" p={4}>
+            <Text fontSize="2xl"> Please login to play Songle.</Text>
+            <Button
+              colorScheme={"purple"}
+              w="100%"
+              justifyContent={"center"}
+              size="lg"
+              onClick={() => signin()}
+            >
+              Sign Up
+            </Button>
+            <Button
+              colorScheme={"green"}
+              w="100%"
+              size="lg"
+              justifyContent={"center"}
+              onClick={() => signin()}
+            >
+              Log In
+            </Button>
+          </VStack>
+        </Stack>
+      )}
 
       {loading && !userData && !leaderboard && <Spinner />}
 

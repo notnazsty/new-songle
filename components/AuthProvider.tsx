@@ -17,12 +17,14 @@ import { SpotifyTokenResponse } from "../models/spotify/user";
 
 const authContext = createContext<{
   user: User | null;
-  loading: boolean;
+  userLoading: boolean;
   userData: AccountCollectionDoc | null;
+  userDataLoading: boolean;
 }>({
   user: null,
-  loading: true,
+  userLoading: true,
   userData: null,
+  userDataLoading: true,
 });
 
 export const useUser = () => {
@@ -33,19 +35,23 @@ const MILLISECONDS_IN_AN_HOUR = 3600 * 1000; // seconds in an hour * ms in a sec
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [userLoading, setLoading] = useState(true);
   const [userData, setUserData] = useState<AccountCollectionDoc | null>(null);
+  const [userDataLoading, setUserDataLoading] = useState(true);
 
   useEffect(() => {
+    setUserDataLoading(true);
     if (user) {
       const unsub = onSnapshot(doc(userRef, user.uid), (doc) => {
         const data = doc.data() as AccountCollectionDoc;
         setUserData(data);
+        setUserDataLoading(false);
       });
 
       return unsub;
     } else {
       setUserData(null);
+      setUserDataLoading(false);
     }
   }, [user]);
 
@@ -101,7 +107,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, [refreshTokenData]);
 
   return (
-    <authContext.Provider value={{ user, loading, userData }}>
+    <authContext.Provider value={{ user, userLoading, userData, userDataLoading }}>
       {children}
     </authContext.Provider>
   );

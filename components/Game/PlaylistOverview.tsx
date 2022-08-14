@@ -85,7 +85,8 @@ const PlaylistOverview: React.FC<PlaylistOverviewProps> = ({
       <Tabs
         variant="solid-rounded"
         colorScheme="green"
-        my={{ base: 24, md: 2 }}
+        m={{ base: 4, md: 2 }}
+        
       >
         <TabList>
           <Tab> Playlist </Tab>
