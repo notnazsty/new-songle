@@ -54,7 +54,7 @@ const PlaylistSelect: React.FC<PlaylistSelectProps> = ({
 
   return (
     <>
-    <Heading w="100%" textAlign={"center"} pb={8} size={{base: "md", md: "xl"}}>Choose songs to upload</Heading>
+    <Heading w="100%" textAlign={"center"} pb={8} size={{base: "md", md: "xl"}}>Choose playlists to upload</Heading>
     <Grid templateColumns={{sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)", xl: "repeat(5, 1fr)"}} rowGap={12}>
       {playlists.map((playlist) => (
         <PlaylistSelectCard

@@ -41,7 +41,7 @@ const CasualGrid: React.FC<CasualGridProps> = ({ songList, handleGuess }) => {
           }}
           gridGap={4}
         >
-          {songList.map((song, i) => (
+          {searchSongList.map((song, i) => (
             <CasualCard key={i} song={song} handleGuess={handleGuess} />
           ))}
         </Grid>

@@ -24,19 +24,16 @@ const PlaylistCarousel: React.FC<PlaylistCarouselProps> = ({
         <Swiper
           breakpoints={{
             1280: {
-              slidesPerView: 5,
-            },
-            1000: {
-              slidesPerView: 5,
+              slidesPerView: playlists.length <5? playlists.length : 5,
             },
             780: {
-              slidesPerView: 4,
+              slidesPerView: playlists.length <4? playlists.length : 4,
             },
             620: {
-              slidesPerView: 3,
+              slidesPerView: playlists.length <3? playlists.length : 3,
             },
             370: {
-              slidesPerView: 2,
+              slidesPerView: playlists.length <2? playlists.length : 2,
             },
           }}
           modules={[Pagination]}
