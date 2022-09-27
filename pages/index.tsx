@@ -32,10 +32,9 @@ const Home: NextPage = () => {
     PlaylistCollectionDoc[] | null
   >(null);
 
-  const loadPlaylists = useCallback(async () => {
-    if (loading && user && userData) {
-      setLoading(false);
-
+  const loadPublicPlaylists = useCallback(async () => {
+    if (loading) {
+      console.log("hey");
       let docs = await getPlaylistsWithWhereQuery("public", "==", true);
       let playlistArr: PlaylistCollectionDoc[] = [];
       for (let i = 0; i < docs.size; i++) {
@@ -44,8 +43,14 @@ const Home: NextPage = () => {
         ].data()) as PlaylistCollectionDoc;
         playlistArr.push(playlist);
       }
+      console.log(playlistArr);
       setPlaylists(playlistArr);
+    }
+  }, [loading]);
 
+  const loadPlaylists = useCallback(async () => {
+    if (loading && user && userData) {
+      setLoading(false);
       const playlistIDs: string[] = await userData.playlistIDs;
       let playlistsArr: PlaylistCollectionDoc[] = [];
       for (let i = 0; i < playlistIDs.length; i++) {
@@ -60,8 +65,9 @@ const Home: NextPage = () => {
   }, [loading, user, userData]);
 
   useEffect(() => {
+    loadPublicPlaylists();
     loadPlaylists();
-  }, [loadPlaylists]);
+  }, [loadPlaylists, loadPublicPlaylists]);
 
   return (
     <Box bg={"black"} color="gray.300" minH="100vh">
@@ -71,7 +77,6 @@ const Home: NextPage = () => {
         <meta name="description" content="Songle" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <VStack pos="relative">
         <Box
           h={64}
@@ -86,6 +91,30 @@ const Home: NextPage = () => {
               https://www.designyourway.net/blog/typography/spotify-font/#:~:text=Raleway,it%20for%20big%20display%20purposes.
           */}
         <Text pt={8}> This website is still under development.</Text>
+      </VStack>
+
+      {loading ||
+        !playlists ||
+        (!personalPlaylists && (
+          <Center p={8}>
+            <Spinner size="xl" color="orange" />
+          </Center>
+        ))}
+      <VStack w="100%" py={{ base: 4, md: 8 }} alignItems="center">
+        <Box maxW="6xl" w="100%" p={4}>
+          {/* Add Search Bar Stuff Here */}
+          <PlaylistQuerySearchbar />
+        </Box>
+        {playlists && (
+          <PlaylistCarousel name="Popular Playlists" playlists={playlists} />
+        )}
+
+        {user && !loading && personalPlaylists && (
+          <PlaylistCarousel
+            name="Your Playlists"
+            playlists={personalPlaylists}
+          />
+        )}
       </VStack>
 
       {!user && !userLoading && (
@@ -225,37 +254,6 @@ const Home: NextPage = () => {
             </Button>
           </VStack>
         </Stack>
-      )}
-
-      {user && (
-        <>
-          {loading ||
-            !playlists ||
-            (!personalPlaylists && (
-              <Center p={8}>
-                <Spinner size="xl" color="orange" />
-              </Center>
-            ))}
-
-          {!loading && playlists && personalPlaylists && (
-            <VStack w="100%" py={{ base: 4, md: 8 }} alignItems="center">
-              <Box maxW="6xl" w="100%" p={4}>
-                {/* Add Search Bar Stuff Here */}
-                <PlaylistQuerySearchbar />
-              </Box>
-
-              <PlaylistCarousel
-                name="Popular Playlists"
-                playlists={playlists}
-              />
-
-              <PlaylistCarousel
-                name="Your Playlists"
-                playlists={personalPlaylists}
-              />
-            </VStack>
-          )}
-        </>
       )}
     </Box>
   );
