@@ -1,4 +1,4 @@
-import { Box, Text, Button, Spinner, Stack, VStack } from "@chakra-ui/react";
+import { Box, Image, Text, Button, Spinner, Stack, VStack } from "@chakra-ui/react";
 import CasualGame from "components/Game/Casual/CasualGame";
 import Navbar from "components/Layout/Navbar";
 import { updatePlaylistPopularity } from "../../firebase/playlists/savePlaylists";
@@ -161,22 +161,20 @@ const PlaylistPage: NextPage = () => {
           <VStack maxW="md" w="100%" p={4}>
             <Text fontSize="2xl"> Please login to play Songle.</Text>
             <Button
-              colorScheme={"purple"}
               w="100%"
-              justifyContent={"center"}
-              size="lg"
-              onClick={() => signin()}
+              maxW="xs"
+              leftIcon={
+                <Image src={"/google_logo.png"} alt={"Google"} boxSize={5} />
+              }
+              border="1px solid"
+              borderColor={"gray.200"}
+              backgroundColor="white"
+              rounded="md"
+              textColor={'black'}
+              _hover={{ backgroundColor: "#efefef" }}
+              onClick={async () => await signin()}
             >
-              Sign Up
-            </Button>
-            <Button
-              colorScheme={"green"}
-              w="100%"
-              size="lg"
-              justifyContent={"center"}
-              onClick={() => signin()}
-            >
-              Log In
+              Sign in with Google
             </Button>
           </VStack>
         </Stack>
