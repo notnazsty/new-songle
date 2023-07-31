@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Image,
   Spinner,
   Stack,
   VStack,
@@ -75,25 +76,23 @@ const Account: NextPage = () => {
             h="100%"
           >
             <VStack maxW="md" w="100%" p={4}>
-              <Text fontSize="2xl"> Login to your account.</Text>
+              <Text fontSize="2xl"> Sign in to play.</Text>
               <Button
-                colorScheme={"purple"}
-                w="100%"
-                justifyContent={"center"}
-                size="lg"
-                onClick={() => signin()}
-              >
-                Sign Up
-              </Button>
-              <Button
-                colorScheme={"green"}
-                w="100%"
-                size="lg"
-                justifyContent={"center"}
-                onClick={() => signin()}
-              >
-                Log In
-              </Button>
+              w="100%"
+              maxW="xs"
+              leftIcon={
+                <Image src={"/google_logo.png"} alt={"Google"} boxSize={5} />
+              }
+              border="1px solid"
+              borderColor={"gray.200"}
+              backgroundColor="white"
+              rounded="md"
+              textColor={'black'}
+              _hover={{ backgroundColor: "#efefef" }}
+              onClick={async () => await signin()}
+            >
+              Sign in with Google
+            </Button>
             </VStack>
           </Stack>
         )}

@@ -1,5 +1,6 @@
 import {
   Box,
+  Image,
   Center,
   Spinner,
   VStack,
@@ -232,25 +233,24 @@ const Home: NextPage = () => {
                 </svg>
               </Icon>
             </Box>
+           
           </Stack>
           <VStack minW="min(100vw, 300px)" p={4} justify="center">
-            <Button
-              colorScheme={"purple"}
+          <Button
               w="100%"
-              justifyContent={"center"}
-              size="lg"
-              onClick={() => signin()}
+              maxW="xs"
+              leftIcon={
+                <Image src={"/google_logo.png"} alt={"Google"} boxSize={5} />
+              }
+              border="1px solid"
+              borderColor={"gray.200"}
+              backgroundColor="white"
+              rounded="md"
+              textColor={'black'}
+              _hover={{ backgroundColor: "#efefef" }}
+              onClick={async () => await signin()}
             >
-              Sign Up
-            </Button>
-            <Button
-              colorScheme={"green"}
-              w="100%"
-              size="lg"
-              justifyContent={"center"}
-              onClick={() => signin()}
-            >
-              Log In
+              Sign in with Google
             </Button>
           </VStack>
         </Stack>
